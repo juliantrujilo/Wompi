@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía Paso a Paso S18A — Wompi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg:#0f1117; --surface:#1a1f2e; --surface2:#222840; --border:#2a3352;
+  --txt:#e2e8f0; --txt-dim:#8892a4;
+  --accent:#3b82f6; --accent-glow:rgba(59,130,246,.12);
+  --green:#22c55e; --green-bg:rgba(34,197,94,.10);
+  --red:#f87171; --red-bg:rgba(248,113,113,.10);
+  --yellow:#f59e0b; --yellow-bg:rgba(245,158,11,.10);
+  --purple:#a78bfa; --purple-bg:rgba(167,139,250,.10);
+  --teal:#2dd4bf; --teal-bg:rgba(45,212,191,.10);
+  --code-bg:#0d1117; --sidebar-w:260px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--txt);font-size:15px;line-height:1.7;display:flex;min-height:100vh;}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sidebar-w);flex-shrink:0;position:fixed;top:0;left:0;bottom:0;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:24px 0 40px;display:flex;flex-direction:column;}
+.sidebar-brand{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:16px;}
+.sidebar-brand .curso{font-size:11px;color:var(--teal);font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+.sidebar-brand h1{font-size:14px;font-weight:700;color:var(--txt);margin-top:4px;line-height:1.3;}
+.sidebar-brand .ficha{font-size:11px;color:var(--txt-dim);margin-top:2px;}
+.progress-wrap{padding:16px 20px;border-bottom:1px solid var(--border);margin-bottom:8px;}
+.progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--txt-dim);margin-bottom:8px;}
+.progress-label span:last-child{color:var(--teal);font-weight:700;}
+.progress-bar-bg{height:6px;background:var(--surface2);border-radius:10px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:var(--teal);border-radius:10px;transition:width .4s ease;width:0%;}
+.nav-section{padding:0 12px;margin-bottom:4px;}
+.nav-label{font-size:10px;color:var(--txt-dim);letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding:8px 8px 4px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;cursor:pointer;color:var(--txt-dim);font-size:13px;font-weight:500;text-decoration:none;transition:background .15s,color .15s;border:none;background:none;width:100%;text-align:left;}
+.nav-item:hover{background:var(--accent-glow);color:var(--txt);}
+.nav-item.active{background:var(--accent-glow);color:var(--accent);}
+.nav-item.active .nav-dot{background:var(--accent);}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:var(--border);flex-shrink:0;transition:background .15s;}
+.nav-item:hover .nav-dot{background:var(--txt-dim);}
+.nav-item.done{color:var(--teal);}
+.nav-item.done .nav-dot{background:var(--teal);}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar-w);flex:1;padding:48px 56px 80px;max-width:820px;}
+
+/* ── HEADER ── */
+.page-header{margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--border);}
+.page-tag{font-size:11px;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:8px;}
+.page-title{font-size:28px;font-weight:700;color:var(--txt);line-height:1.2;text-wrap:balance;}
+.page-subtitle{font-size:14px;color:var(--txt-dim);margin-top:8px;}
+.page-warning{margin-top:20px;background:var(--yellow-bg);border:1px solid rgba(245,158,11,.25);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--yellow);font-weight:500;}
+
+/* ── INTRO CARD ── */
+.intro-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:32px 36px;margin-bottom:52px;}
+.intro-tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:10px;}
+.intro-title{font-size:20px;font-weight:800;color:var(--txt);line-height:1.25;margin-bottom:10px;}
+.intro-sub{font-size:14px;color:var(--txt-dim);margin-bottom:20px;line-height:1.6;}
+.intro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.intro-item{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.intro-item-icon{font-size:22px;margin-bottom:8px;}
+.intro-item-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--txt-dim);margin-bottom:4px;}
+.intro-item-desc{font-size:13px;color:var(--txt);font-weight:500;line-height:1.4;}
+
+/* ── SECCIONES ── */
+.section{margin-bottom:56px;scroll-margin-top:32px;}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.step-badge{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;background:var(--accent-glow);color:var(--accent);border:1px solid rgba(59,130,246,.3);border-radius:6px;padding:3px 10px;white-space:nowrap;letter-spacing:.04em;flex-shrink:0;}
+.step-badge.green{background:var(--green-bg);color:var(--green);border-color:rgba(34,197,94,.3);}
+.step-badge.yellow{background:var(--yellow-bg);color:var(--yellow);border-color:rgba(245,158,11,.3);}
+.step-badge.extra{background:var(--purple-bg);color:var(--purple);border-color:rgba(167,139,250,.3);}
+.step-badge.red{background:var(--red-bg);color:var(--red);border-color:rgba(248,113,113,.3);}
+.step-badge.teal{background:var(--teal-bg);color:var(--teal);border-color:rgba(45,212,191,.3);}
+.section-title{font-size:20px;font-weight:700;color:var(--txt);text-wrap:balance;}
+
+/* ── PASOS ── */
+.step-list{display:flex;flex-direction:column;gap:20px;}
+.step-item{display:flex;gap:16px;}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--accent);font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.step-body{flex:1;}
+.step-body p{color:var(--txt);font-size:14px;}
+.step-body strong{color:var(--txt);font-weight:600;}
+
+/* ── CÓDIGO ── */
+.code-wrap{margin:12px 0;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+.code-header{display:flex;align-items:center;gap:8px;background:var(--surface2);padding:8px 14px;border-bottom:1px solid var(--border);}
+.code-dots{display:flex;gap:5px;}
+.code-dot{width:10px;height:10px;border-radius:50%;}
+.code-dot.r{background:#ff5f57;} .code-dot.y{background:#febc2e;} .code-dot.g{background:#28c840;}
+.code-filename{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt-dim);flex:1;}
+.code-tag{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:4px;}
+.code-tag.blue{background:rgba(59,130,246,.15);color:var(--accent);}
+.code-tag.green{background:var(--green-bg);color:var(--green);}
+.code-tag.yellow{background:var(--yellow-bg);color:var(--yellow);}
+.code-tag.purple{background:var(--purple-bg);color:var(--purple);}
+.code-tag.teal{background:var(--teal-bg);color:var(--teal);}
+pre{background:var(--code-bg);padding:18px 20px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.65;color:#abb2bf;}
+pre .c{color:#5c6370;} pre .k{color:#c678dd;} pre .s{color:#98c379;}
+pre .f{color:#61afef;} pre .n{color:#e5c07b;} pre .y{color:#d19a66;}
+pre .edit{color:#fbbf24;background:rgba(245,158,11,.12);border-radius:3px;padding:0 2px;}
+
+/* ── CALLOUTS ── */
+.callout{display:flex;gap:10px;align-items:flex-start;padding:12px 16px;border-radius:8px;font-size:13px;margin:14px 0;line-height:1.5;}
+.callout.ok{background:var(--green-bg);border:1px solid rgba(34,197,94,.2);color:var(--green);}
+.callout.err{background:var(--red-bg);border:1px solid rgba(248,113,113,.2);color:var(--red);}
+.callout.warn{background:var(--yellow-bg);border:1px solid rgba(245,158,11,.2);color:var(--yellow);}
+.callout.info{background:var(--accent-glow);border:1px solid rgba(59,130,246,.2);color:#93c5fd;}
+.callout.teal{background:var(--teal-bg);border:1px solid rgba(45,212,191,.2);color:var(--teal);}
+.callout-icon{font-size:15px;flex-shrink:0;margin-top:1px;}
+.callout strong{color:inherit;font-weight:600;}
+
+/* ── TABLA ── */
+.table-wrap{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--surface2);color:var(--txt-dim);font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--txt);vertical-align:top;}
+td:first-child{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--red);}
+tr:last-child td{border-bottom:none;}
+
+/* ── CHECKLIST ── */
+.checklist{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.checklist li{display:flex;align-items:flex-start;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--txt-dim);}
+.check-box{width:18px;height:18px;border-radius:4px;border:2px solid var(--border);flex-shrink:0;margin-top:1px;}
+.checklist li strong{color:var(--txt);font-weight:600;}
+code{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surface2);padding:1px 6px;border-radius:4px;color:#93c5fd;}
+
+/* ── SUBSECCIÓN ── */
+.subsec{margin:28px 0 16px;}
+.subsec-title{font-size:15px;font-weight:700;color:var(--txt);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:16px;}
+
+/* ── MOCKUP FORMULARIO WOMPI ── */
+.wompi-mock{background:#fff;border-radius:16px;padding:32px 36px;max-width:460px;margin:16px 0;box-shadow:0 20px 50px rgba(0,0,0,.35);}
+.wompi-mock-h1{font-size:22px;font-weight:800;color:#0f1117;margin-bottom:4px;}
+.wompi-mock-sub{font-size:14px;color:#4b5563;margin-bottom:22px;}
+.wompi-field{margin-bottom:16px;}
+.wompi-label{display:block;font-size:12.5px;font-weight:600;color:#1f2937;margin-bottom:6px;}
+.wompi-input{width:100%;border:1.5px solid #d1d5db;border-radius:8px;padding:10px 12px;font-size:13.5px;color:#111827;font-family:'Inter',sans-serif;background:#fff;}
+.wompi-input.err{border-color:#ef4444;}
+.wompi-input.ok{border-color:#9ca3af;}
+.wompi-hint{font-size:11.5px;color:#6b7280;margin-top:5px;}
+.wompi-rules{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin-top:8px;font-size:11.5px;}
+.wompi-rules span{display:flex;align-items:center;gap:5px;color:#374151;}
+.wompi-rules .bad{color:#dc2626;}
+.wompi-phone{display:flex;gap:8px;}
+.wompi-phone .cc{flex:0 0 64px;border:1.5px solid #d1d5db;border-radius:8px;padding:10px 8px;font-size:13px;color:#111827;background:#f9fafb;text-align:center;}
+.wompi-phone .num{flex:1;}
+.wompi-check{display:flex;align-items:flex-start;gap:8px;margin:18px 0;}
+.wompi-check input{margin-top:3px;}
+.wompi-check label{font-size:12px;color:#374151;line-height:1.5;}
+.wompi-check a{color:#2563eb;}
+.wompi-btn{width:100%;background:#9ca3af;color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;text-align:center;}
+.wompi-btn.active{background:#0f1117;}
+
+/* ── MOCKUP SELECCIÓN TIPO DE COMERCIO ── */
+.wompi-mock-wide{background:#fff;border-radius:16px;padding:32px 36px;margin:16px 0;box-shadow:0 20px 50px rgba(0,0,0,.35);text-align:center;}
+.wompi-mock-wide .wompi-mock-h1{font-size:24px;}
+.wompi-mock-wide .wompi-mock-sub{max-width:520px;margin:0 auto 24px;line-height:1.6;}
+.wompi-tipo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px;text-align:left;}
+.wompi-tipo-card{border:2px solid #e5e7eb;border-radius:14px;padding:20px 22px;position:relative;}
+.wompi-tipo-card.recomendado{border-color:#bef264;background:#fbfef4;}
+.wompi-tipo-card .radio{position:absolute;top:20px;right:20px;width:18px;height:18px;border-radius:50%;border:2px solid #d1d5db;}
+.wompi-tipo-card.recomendado .radio{border-color:#84cc16;}
+.wompi-tipo-title{font-size:19px;font-weight:800;color:#0f1117;margin-bottom:2px;}
+.wompi-tipo-sub{font-size:13px;color:#6b7280;margin-bottom:14px;}
+.wompi-tipo-req{font-size:11.5px;font-weight:700;color:#374151;text-decoration:underline;margin-bottom:10px;}
+.wompi-tipo-item{display:flex;align-items:center;gap:10px;font-size:12.5px;color:#374151;margin-bottom:8px;}
+.wompi-tipo-ico{width:26px;height:26px;border-radius:50%;background:#0f1117;color:#bef264;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+
+/* ── MOCKUP DATOS DEL NEGOCIO (WIZARD) ── */
+.wompi-wizard{background:#fff;border-radius:16px;padding:28px 32px;margin:16px 0;box-shadow:0 20px 50px rgba(0,0,0,.35);}
+.wompi-wizard-steps{display:flex;flex-direction:column;gap:0;margin-bottom:20px;}
+.wompi-wizard-progress{font-size:12px;color:#374151;margin-bottom:6px;}
+.wompi-wizard-bar-bg{height:6px;background:#e5e7eb;border-radius:10px;overflow:hidden;margin-bottom:18px;}
+.wompi-wizard-bar-fill{height:100%;width:5%;background:#0f1117;border-radius:10px;}
+.wompi-wizard-title{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:800;color:#0f1117;margin-bottom:16px;}
+.wompi-wizard-title .ico{width:32px;height:32px;border-radius:50%;background:#0f1117;color:#bef264;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.wompi-wizard-title .sub{font-size:12px;font-weight:400;color:#6b7280;margin-left:4px;}
+.wompi-rut-box{background:linear-gradient(135deg,#f0fdf4,#fff);border:1px solid #d1fae5;border-radius:12px;padding:18px 20px;margin-bottom:18px;}
+.wompi-rut-box strong{color:#0f1117;}
+.wompi-rut-choice{display:flex;gap:10px;margin-top:12px;}
+.wompi-rut-btn{border:1.5px solid #d1d5db;border-radius:10px;padding:10px 16px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:8px;color:#374151;}
+.wompi-rut-btn.selected{border-color:#22c55e;background:#f0fdf4;color:#166534;}
+.wompi-rut-btn .dot{width:14px;height:14px;border-radius:50%;border:2px solid #d1d5db;flex-shrink:0;}
+.wompi-rut-btn.selected .dot{border-color:#22c55e;background:#22c55e;}
+.wompi-info-line{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;font-size:12px;color:#1e40af;margin-bottom:16px;}
+.wompi-grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.wompi-input-err-hint{font-size:11px;color:#dc2626;margin-top:3px;}
+.wompi-radio-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+.wompi-radio-opt{border:1.5px solid #e5e7eb;background:#fafafa;border-radius:9px;padding:13px 16px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:#374151;}
+.wompi-radio-opt .r{width:16px;height:16px;border-radius:50%;border:2px solid #d1d5db;flex-shrink:0;}
+.wompi-radio-opt.sel{border-color:#22c55e;background:#f0fdf4;color:#166534;}
+.wompi-radio-opt.sel .r{border-color:#22c55e;background:radial-gradient(circle,#22c55e 40%,transparent 44%);}
+.wompi-subtitle-h{font-size:14px;font-weight:700;color:#0f1117;margin-bottom:2px;}
+.wompi-subtitle-sub{font-size:12px;color:#6b7280;margin-bottom:12px;}
+
+/* ── MOCKUP PLANES Y PRODUCTOS ── */
+.wompi-planes-h1{font-size:22px;font-weight:800;color:#0f1117;line-height:1.25;margin-bottom:10px;}
+.wompi-planes-sub{font-size:13px;color:#374151;margin-bottom:20px;line-height:1.6;}
+.wompi-planes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px;}
+.wompi-plan-card{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:18px 20px;}
+.wompi-plan-pct{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#166534;margin-bottom:12px;}
+.wompi-plan-title{font-size:15px;font-weight:800;color:#0f1117;margin-bottom:6px;}
+.wompi-plan-desc{font-size:12px;color:#374151;line-height:1.5;margin-bottom:10px;}
+.wompi-plan-link{font-size:11.5px;font-weight:700;color:#0f1117;}
+
+/* ── FLUJO ── */
+.flujo-grid{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0;align-items:center;}
+.flujo-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-align:center;flex:1;min-width:100px;}
+.flujo-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--teal);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;}
+.flujo-txt{font-size:12px;color:var(--txt);font-weight:600;line-height:1.3;}
+.flujo-arrow{color:var(--txt-dim);font-size:18px;flex-shrink:0;}
+
+/* ── BOTÓN COMPLETAR ── */
+.complete-btn{display:flex;align-items:center;gap:10px;margin-top:28px;padding:14px 20px;background:var(--teal-bg);border:1px solid rgba(45,212,191,.3);border-radius:10px;color:var(--teal);font-size:14px;font-weight:600;cursor:pointer;width:100%;transition:all .2s;font-family:'Inter',sans-serif;}
+.complete-btn:hover{border-color:var(--teal);}
+.complete-btn.done{cursor:default;}
+.complete-btn .btn-icon{font-size:18px;}
+.complete-btn .btn-txt{flex:1;text-align:left;}
+.complete-btn .btn-badge{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:4px;background:rgba(45,212,191,.15);color:var(--teal);opacity:0;}
+.complete-btn.done .btn-badge{opacity:1;}
+.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:999;}
+
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+</style>
+<canvas class="confetti-wrap" id="confetti-canvas"></canvas>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<div class="sidebar">
+  <div class="sidebar-brand">
+    <div class="curso">SENA ADSO · S18A</div>
+    <h1>Wompi — Guía Paso a Paso</h1>
+    <div class="ficha">Ficha 3229944 · Sep 2026</div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Progreso</span><span id="progress-txt">0 / 6</span></div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Preparación</div>
+    <a class="nav-item active" href="#paso0"><span class="nav-dot"></span>Paso 0 — Cuenta y llaves</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Backend</div>
+    <a class="nav-item" href="#paso1"><span class="nav-dot"></span>Paso 1 — Modelos</a>
+    <a class="nav-item" href="#paso2"><span class="nav-dot"></span>Paso 2 — Firma + Polling</a>
+    <a class="nav-item" href="#paso3"><span class="nav-dot"></span>Paso 3 — Endpoint estado</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Frontend</div>
+    <a class="nav-item" href="#paso4"><span class="nav-dot"></span>Paso 4 — Widget + Polling</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Cierre</div>
+    <a class="nav-item" href="#checklist"><span class="nav-dot"></span>Checklist + Errores</a>
+  </div>
+</div>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+  <div class="page-header">
+    <div class="page-tag">Sesión 18A · Fase 4 Pruebas y Calidad</div>
+    <h1 class="page-title">Integrar Wompi en TechStore Pro</h1>
+    <p class="page-subtitle">SENA ADSO · Ficha 3229944 · Septiembre 2026</p>
+    <div class="page-warning">⚠️ Sigue cada paso en orden. No avances al siguiente hasta que el anterior funcione y hayas marcado el check.</div>
+  </div>
+
+  <!-- ÁRBOL DE ARCHIVOS -->
+  <div class="intro-card" style="margin-bottom:24px;">
+    <div class="intro-tag">Archivos que vamos a tocar hoy</div>
+    <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">Estructura del proyecto</span></div><pre>plantilla_proyecto/
+├── backend/
+│   ├── models/
+│   │   └── Orden.js              <span class="c">← PASO 1: modelo con wompiReference + estado</span>
+│   ├── routes/
+│   │   └── pago.js               <span class="c">← PASO 2 y 3: firma + polling + webhook</span>
+│   ├── server.js                 <span class="c">← PASO 2: registrar la ruta nueva</span>
+│   └── .env                      <span class="c">← PASO 0: WOMPI_PUBLIC_KEY + WOMPI_INTEGRITY_SECRET</span>
+└── frontend/
+    └── carrito.html              <span class="c">← PASO 4 ✏️: Widget Wompi + polling de resultado</span></pre></div>
+    <div class="callout teal" style="margin-top:16px;"><span class="callout-icon">💡</span><span><strong>Enfoque: Widget Wompi + Polling — sin ngrok</strong><br>
+    En lugar de redirigir al usuario a otra URL, el <strong>Widget de Wompi</strong> se embebe directamente en nuestra página HTML. El backend solo genera una <strong>firma de integridad</strong>. Después del pago, el frontend consulta el estado cada 3 segundos (polling). Sin ngrok. Sin redirecciones.</span></div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro-card">
+    <div class="intro-tag">¿Qué construimos hoy?</div>
+    <div class="intro-title">Widget Wompi embebido + Polling — sin ngrok, sin redirecciones</div>
+    <p class="intro-sub">En S17d el carrito confirma pedidos y los guarda en MongoDB. Hoy conectamos el botón "Pagar" usando el <strong>Widget oficial de Wompi</strong>: el formulario de tarjeta aparece dentro de nuestra página. No hay redirect a otro sitio. El backend genera una firma segura y el frontend consulta el resultado con polling.</p>
+    <div class="intro-grid">
+      <div class="intro-item"><div class="intro-item-icon">🔏</div><div class="intro-item-label">Backend</div><div class="intro-item-desc">Genera firma de integridad SHA256 para que el Widget de Wompi funcione de forma segura</div></div>
+      <div class="intro-item"><div class="intro-item-icon">🔄</div><div class="intro-item-label">Polling</div><div class="intro-item-desc">El frontend consulta el estado del pago cada 3 seg — sin webhook, sin ngrok en desarrollo</div></div>
+      <div class="intro-item"><div class="intro-item-icon">🛒</div><div class="intro-item-label">Widget ✏️</div><div class="intro-item-desc">Script oficial de Wompi se embebe en carrito.html — el usuario paga sin salir de nuestra página</div></div>
+    </div>
+  </div>
+
+  <!-- ════ PASO 0 ════ -->
+  <section class="section" id="paso0" data-step="paso0">
+    <div class="section-header">
+      <span class="step-badge yellow">Paso 0 · Preparación</span>
+      <h2 class="section-title">Registrarse en Wompi y obtener las llaves</h2>
+    </div>
+    <p style="color:var(--txt-dim);font-size:14px;margin-bottom:20px;">Necesitamos 3 llaves del panel de Wompi. El proceso toma unos 5 minutos. <strong>Sin ngrok</strong> — el Widget funciona directo en localhost en modo sandbox.</p>
+
+    <div class="callout teal"><span class="callout-icon">💡</span><span><strong>¿Por qué no se necesita ngrok?</strong><br>
+    Usamos el <strong>Widget embebido de Wompi</strong> + <strong>polling</strong>. El Widget corre en el navegador del usuario y se comunica con Wompi directamente. Nuestro backend solo genera una firma. El polling reemplaza el webhook en desarrollo.</span></div>
+
+    <div class="subsec">
+      <div class="subsec-title">0.1 — Crear la cuenta en Wompi</div>
+      <div class="step-list">
+        <div class="step-item"><div class="step-num">1</div><div class="step-body">
+          <p>Ir a <strong>comercios.wompi.co</strong> → botón <strong>"Regístrate"</strong>.</p>
+        </div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-body">
+          <p>Completar el formulario <strong>"Crea tu cuenta en Wompi"</strong>:</p>
+
+          <!-- MOCKUP DEL FORMULARIO REAL -->
+          <div class="wompi-mock">
+            <div class="wompi-mock-h1">¡Bienvenido!</div>
+            <div class="wompi-mock-sub">Crea tu cuenta en Wompi</div>
+
+            <div class="wompi-field">
+              <label class="wompi-label">Nombre de usuario *</label>
+              <input class="wompi-input err" value="usuario2024" readonly>
+              <div class="wompi-rules">
+                <span>✅ Tener 8-20 caracteres</span>
+                <span>✅ Sin la letra Ñ</span>
+                <span>✅ Mínimo 2 números</span>
+                <span>✅ Mínimo 2 letras</span>
+                <span>✅ Sin caracteres especiales</span>
+                <span class="bad">❌ Sin 4 números seguidos</span>
+                <span>✅ Sin mayúsculas</span>
+              </div>
+            </div>
+
+            <div class="wompi-field">
+              <label class="wompi-label">Correo electrónico *</label>
+              <input class="wompi-input ok" value="correo@ejemplo.com" readonly>
+              <div class="wompi-hint">Enviaremos un código de verificación</div>
+            </div>
+
+            <div class="wompi-field">
+              <label class="wompi-label">Confirmación de correo electrónico *</label>
+              <input class="wompi-input ok" value="correo@ejemplo.com" readonly>
+            </div>
+
+            <div class="wompi-field">
+              <label class="wompi-label">WhatsApp *</label>
+              <div class="wompi-phone">
+                <div class="cc">🇨🇴 +57</div>
+                <input class="wompi-input ok num" value="3001234567" readonly>
+              </div>
+              <div class="wompi-hint">Número de contacto (que no sea un chatbot)</div>
+            </div>
+
+            <div class="wompi-field">
+              <label class="wompi-label">Contraseña *</label>
+              <input class="wompi-input ok" type="password" value="12345678901234" readonly>
+            </div>
+
+            <div class="wompi-field">
+              <label class="wompi-label">Confirmar contraseña *</label>
+              <input class="wompi-input ok" type="password" value="12345678901234" readonly>
+            </div>
+
+            <div class="wompi-check">
+              <input type="checkbox" disabled>
+              <label>Acepto la <a href="#">autorización para el tratamiento de mis datos personales</a></label>
+            </div>
+
+            <div class="wompi-btn">Crear tu cuenta →</div>
+          </div>
+
+          <div class="callout warn"><span class="callout-icon">⚠️</span><span><strong>El nombre de usuario del ejemplo falla</strong> — <code>usuario2024</code> tiene <code>2024</code>, 4 números seguidos. Wompi valida las reglas <strong>en vivo</strong> con checks ✅/❌ mientras escribes. Corrige a algo como <code>usuario20</code> para que el check quede en verde.</span></div>
+          <p style="margin-top:10px;">El botón <strong>"Crear tu cuenta"</strong> permanece deshabilitado (gris) hasta que: todos los checks del usuario estén en ✅, el correo y su confirmación coincidan, y marques el checkbox de autorización de datos. Al enviarlo, Wompi manda un código de verificación al correo.</p>
+        </div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-body">
+          <p>Tras confirmar el correo, Wompi pregunta qué tipo de comercio vas a registrar:</p>
+
+          <!-- MOCKUP SELECCIÓN TIPO DE COMERCIO -->
+          <div class="wompi-mock-wide">
+            <div class="wompi-mock-h1">¡Bienvenido a Wompi!</div>
+            <div class="wompi-mock-sub">Selecciona <strong>Persona Natural</strong> si recibes pagos con tu documento de identificación personal, o elige <strong>Persona Jurídica</strong> si recibes pagos con el documento tributario de tu empresa.</div>
+            <div class="wompi-tipo-grid">
+              <div class="wompi-tipo-card">
+                <div class="radio"></div>
+                <div class="wompi-tipo-title">Empresarial</div>
+                <div class="wompi-tipo-sub">Persona Jurídica</div>
+                <div class="wompi-tipo-req">Debes contar con:</div>
+                <div class="wompi-tipo-item"><span class="wompi-tipo-ico">📄</span> Documento tributario de tu empresa.</div>
+                <div class="wompi-tipo-item"><span class="wompi-tipo-ico">💳</span> Cuenta bancaria a nombre de la empresa.</div>
+              </div>
+              <div class="wompi-tipo-card recomendado">
+                <div class="radio"></div>
+                <div class="wompi-tipo-title">Independiente</div>
+                <div class="wompi-tipo-sub">Persona Natural</div>
+                <div class="wompi-tipo-req">Debes contar con:</div>
+                <div class="wompi-tipo-item"><span class="wompi-tipo-ico">📄</span> Documento tributario a nombre personal.</div>
+                <div class="wompi-tipo-item"><span class="wompi-tipo-ico">💳</span> Cuenta bancaria habilitada.</div>
+              </div>
+            </div>
+            <div class="wompi-btn">Activa tu comercio →</div>
+          </div>
+
+          <div class="callout tip"><span class="callout-icon">✅</span><span><strong>Para este proyecto elige "Independiente" (Persona Natural).</strong><br>
+          TechStore Pro es un proyecto académico, no una empresa constituida con NIT. Selecciona el círculo de <strong>Independiente</strong> y luego <strong>"Activa tu comercio"</strong>. Necesitarás tu documento de identificación personal y, más adelante, podrás vincular una cuenta bancaria a tu nombre — en modo Sandbox esto no bloquea el uso de las llaves de prueba.</span></div>
+        </div></div>
+        <div class="step-item"><div class="step-num">4</div><div class="step-body">
+          <p>Al elegir <strong>Independiente</strong>, Wompi abre el wizard de <strong>"Datos del negocio"</strong> — 3 etapas: <strong>1. Datos del negocio → 2. Datos bancarios → 3. Planes y productos</strong>.</p>
+
+          <!-- MOCKUP WIZARD DATOS DEL NEGOCIO -->
+          <div class="wompi-wizard">
+            <div class="wompi-wizard-progress">Porcentaje de avance en el registro de (datos del negocio). &nbsp; 5%</div>
+            <div class="wompi-wizard-bar-bg"><div class="wompi-wizard-bar-fill"></div></div>
+            <div class="wompi-wizard-title"><span class="ico">🏢</span> Ingresa tus datos del negocio <span class="sub">Registro Persona Natural</span></div>
+
+            <div class="wompi-rut-box">
+              <strong>Sube tu RUT si lo tienes a la mano</strong>
+              <p style="font-size:12.5px;color:#374151;margin-top:4px;">Súbelo ahora para activar tu comercio más rápido y empezar a hacer transacciones cuanto antes. Sino, continúa y lo subes después.</p>
+              <div class="wompi-rut-choice">
+                <div class="wompi-rut-btn selected"><span class="dot"></span> Sí, lo subo ahora</div>
+                <div class="wompi-rut-btn"><span class="dot"></span> No, lo subiré después</div>
+              </div>
+            </div>
+
+            <div class="wompi-info-line">✏️ Por favor diligencie su nombre completo, de acuerdo con su documento de identidad, sin abreviaciones ni omisiones.</div>
+
+            <div class="wompi-grid2">
+              <div class="wompi-field">
+                <label class="wompi-label">Primer nombre</label>
+                <input class="wompi-input err" placeholder="Juan" readonly>
+                <div class="wompi-input-err-hint">Este campo es obligatorio</div>
+              </div>
+              <div class="wompi-field">
+                <label class="wompi-label">Segundo nombre (Opcional)</label>
+                <input class="wompi-input ok" placeholder="Carlos" readonly>
+              </div>
+              <div class="wompi-field">
+                <label class="wompi-label">Primer apellido</label>
+                <input class="wompi-input err" placeholder="Espinoza" readonly>
+                <div class="wompi-input-err-hint">Este campo es obligatorio</div>
+              </div>
+              <div class="wompi-field">
+                <label class="wompi-label">Segundo apellido (Opcional)</label>
+                <input class="wompi-input ok" placeholder="Ramirez" readonly>
+              </div>
+              <div class="wompi-field">
+                <label class="wompi-label">Tipo de documento</label>
+                <input class="wompi-input ok" placeholder="Selecciona tipo de documento" readonly>
+              </div>
+              <div class="wompi-field">
+                <label class="wompi-label">Documento de identificación</label>
+                <input class="wompi-input ok" placeholder="1234567890" readonly>
+                <div class="wompi-hint">Sin puntos, guiones, espacios o caracteres especiales.</div>
+              </div>
+            </div>
+
+            <div class="wompi-field">
+              <label class="wompi-label">Nombre comercial de tu negocio</label>
+              <input class="wompi-input ok" placeholder="Ej: Panadería Dulce Sabor" readonly>
+              <div class="wompi-hint">Nombre que utilizan tus clientes para referirse a ti</div>
+            </div>
+          </div>
+
+          <div class="callout info"><span class="callout-icon">💡</span><span><strong>¿No tienes el RUT en PDF?</strong> Se descarga en 1 minuto desde la página de la DIAN. Wompi <strong>solo acepta el PDF original emitido por la DIAN</strong> — no acepta fotos ni capturas de pantalla.</span></div>
+
+          <div class="callout tip"><span class="callout-icon">✅</span><span><strong>Completar así este formulario:</strong><br>
+          • <strong>Primer nombre / Primer apellido</strong> — obligatorios, tal como aparecen en tu documento de identidad, sin abreviar.<br>
+          • <strong>Tipo de documento</strong> — Cédula de Ciudadanía.<br>
+          • <strong>Documento de identificación</strong> — solo números, sin puntos ni espacios.<br>
+          • <strong>Nombre comercial de tu negocio</strong> — escribe <code>TechStore Pro</code>.<br>
+          • Si tienes el RUT en PDF descargado de la DIAN, elige <strong>"Sí, lo subo ahora"</strong> y adjúntalo. Si no lo tienes, elige <strong>"No, lo subiré después"</strong> — el sandbox no se bloquea por esto.</span></div>
+        </div></div>
+        <div class="step-item"><div class="step-num">5</div><div class="step-body">
+          <p>Después de los datos personales, la misma pantalla de <strong>"Datos del negocio"</strong> avanza al 26% y pide las <strong>Preguntas de cumplimiento</strong> — información exigida por regulación anti-lavado de activos (SARLAFT), estándar en toda fintech colombiana.</p>
+
+          <div class="wompi-wizard">
+            <div class="wompi-wizard-progress">Porcentaje de avance en el diligenciamiento &nbsp; 26%</div>
+            <div class="wompi-wizard-bar-bg"><div class="wompi-wizard-bar-fill" style="width:26%;"></div></div>
+            <div class="wompi-wizard-title"><span class="ico">🏢</span> Ingresa tus datos del negocio <span class="sub">Registro Persona Natural</span></div>
+            <div style="font-size:14px;font-weight:700;color:#0f1117;margin-bottom:14px;">Preguntas de cumplimiento</div>
+
+            <div class="wompi-grid2">
+              <div class="wompi-field">
+                <label class="wompi-label">¿De dónde provienen tus recursos?</label>
+                <input class="wompi-input ok" value="Desarrollo y utilidades de mi actividad económica principal" readonly>
+              </div>
+              <div class="wompi-field">
+                <label class="wompi-label">¿De qué país provienen estos recursos?</label>
+                <input class="wompi-input ok" value="Colombia" readonly>
+              </div>
+            </div>
+            <div class="wompi-hint" style="margin:-6px 0 16px;">Otras opciones del primer dropdown: "Actividad económica secundaria o terciaria" · "Intereses o rendimientos financieros" · "Utilidades por participación en sociedades"</div>
+
+            <div class="wompi-field">
+              <label class="wompi-label">¿Eres o fuiste hace menos de dos años Persona Expuesta Políticamente (PEP) nacional o extranjero?</label>
+            </div>
+            <div class="wompi-field">
+              <label class="wompi-label">¿Tienes relación con una Persona Expuesta Políticamente?</label>
+            </div>
+            <div class="wompi-field">
+              <label class="wompi-label">¿Tu actividad económica implica la gestión, administración, compra o venta de activos virtuales (criptomonedas, NFT)?</label>
+            </div>
+          </div>
+
+          <div class="callout tip"><span class="callout-icon">✅</span><span><strong>Cómo responder (proyecto académico, ingresos propios en Colombia):</strong><br>
+          • <strong>¿De dónde provienen tus recursos?</strong> → "Desarrollo y utilidades de mi actividad económica principal" (tu trabajo/estudio genera el ingreso, no inversiones ni sociedades).<br>
+          • <strong>¿De qué país provienen estos recursos?</strong> → Colombia.<br>
+          • <strong>¿Eres o fuiste PEP?</strong> → No, salvo que ocupes o hayas ocupado un cargo público de alto nivel.<br>
+          • <strong>¿Tienes relación con una PEP?</strong> → No, salvo que un familiar cercano ocupe ese tipo de cargo.<br>
+          • <strong>¿Tu actividad implica criptomonedas/NFT?</strong> → No, a menos que realmente trabajes con eso.<br>
+          Responde siempre con la verdad — son datos legales que Wompi reporta, no hay una "respuesta genérica" correcta, solo la que corresponda a tu situación real.</span></div>
+        </div></div>
+        <div class="step-item"><div class="step-num">6</div><div class="step-body">
+          <p>El siguiente sub-paso — <strong>"Actividad de la empresa"</strong> (37% de avance) — pide la categoría del negocio y la dirección del comercio.</p>
+
+          <div class="wompi-wizard">
+            <div class="wompi-wizard-progress">Porcentaje de avance en el registro de <strong>(Datos del negocio)</strong>. &nbsp; 37%</div>
+            <div class="wompi-wizard-bar-bg"><div class="wompi-wizard-bar-fill" style="width:37%;"></div></div>
+            <div class="wompi-wizard-title"><span class="ico">🏢</span> Ingresa tus datos del negocio <span class="sub">Registro Persona Natural</span></div>
+            <div style="font-size:14px;font-weight:700;color:#0f1117;margin-bottom:14px;">Actividad de la empresa</div>
+
+            <div class="wompi-grid2">
+              <div class="wompi-field">
+                <label class="wompi-label">Categoría Principal</label>
+                <input class="wompi-input ok" value="Productos digitales" readonly>
+              </div>
+              <div class="wompi-field">
+                <label class="wompi-label">Categoría Secundario</label>
+                <input class="wompi-input ok" placeholder="Selecciona uno" readonly>
+              </div>
+            </div>
+
+            <div style="font-size:14px;font-weight:700;color:#0f1117;margin:18px 0 14px;">Dirección o domicilio principal del comercio</div>
+
+            <div class="wompi-grid2">
+              <div class="wompi-field">
+                <label class="wompi-label">Departamento</label>
+                <input class="wompi-input ok" placeholder="Selecciona uno" readonly>
+              </div>
+              <div class="wompi-field">
+                <label class="wompi-label">Ciudad</label>
+                <input class="wompi-input ok" placeholder="Selecciona uno" readonly>
+              </div>
+              <div class="wompi-field">
+                <label class="wompi-label">Dirección completa</label>
+                <input class="wompi-input ok" placeholder="Carrera 1 # 2 - 3" readonly>
+                <div class="wompi-hint">Dirección del comercio tal como está registrado en tu documento tributario.</div>
+              </div>
+              <div class="wompi-field">
+                <label class="wompi-label">Datos adicionales</label>
+                <input class="wompi-input ok" placeholder="Edificio 1" readonly>
+                <div class="wompi-hint">Interior, bloque, apartamento, piso, oficina...</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout tip"><span class="callout-icon">✅</span><span><strong>Cómo completar para TechStore Pro:</strong><br>
+          • <strong>Categoría Principal</strong> → <code>Productos digitales</code>. Es la categoría del dropdown que mejor describe una tienda en línea de tecnología, mejor que una categoría de comercio físico.<br>
+          • <strong>Categoría Secundario</strong> → si el campo es obligatorio, elige algo relacionado como "Comercio electrónico" o "Tecnología"; si es opcional, puede dejarse vacío.<br>
+          • <strong>Departamento / Ciudad / Dirección completa</strong> → usa tu dirección real (o la de tu documento tributario si subiste el RUT), en formato <code>Carrera 1 # 2 - 3</code>.<br>
+          • <strong>Datos adicionales</strong> → opcional, complemento tipo apartamento u oficina.</span></div>
+        </div></div>
+        <div class="step-item"><div class="step-num">7</div><div class="step-body">
+          <p>El siguiente sub-paso — <strong>"Canales de venta"</strong> (56% de avance) — pide redes sociales y cómo se vende el producto.</p>
+
+          <div class="wompi-wizard">
+            <div class="wompi-wizard-progress">Porcentaje de avance en el registro de <strong>(Datos del negocio)</strong>. &nbsp; 56%</div>
+            <div class="wompi-wizard-bar-bg"><div class="wompi-wizard-bar-fill" style="width:56%;"></div></div>
+            <div class="wompi-wizard-title"><span class="ico">🏢</span> Ingresa tus datos del negocio <span class="sub">Registro Persona Natural</span></div>
+            <div style="font-size:14px;font-weight:700;color:#0f1117;margin-bottom:14px;">Canales de venta</div>
+
+            <div class="wompi-info-line">🔗 <strong>Para continuar, es obligatorio que proporciones al menos dos redes sociales activas de tu negocio.</strong> Esto nos ayuda a validar tu identidad y garantizar la seguridad en el proceso.</div>
+
+            <div class="wompi-grid2">
+              <div class="wompi-field">
+                <label class="wompi-label">Página Web</label>
+                <input class="wompi-input ok" placeholder="https://empresa.com" readonly>
+              </div>
+              <div class="wompi-field">
+                <label class="wompi-label">Facebook</label>
+                <input class="wompi-input ok" placeholder="facebook.com/nombreusuario" readonly>
+              </div>
+              <div class="wompi-field">
+                <label class="wompi-label">Instagram</label>
+                <input class="wompi-input ok" placeholder="@nombreusuario" readonly>
+              </div>
+              <div class="wompi-field">
+                <label class="wompi-label">WhatsApp Business</label>
+                <div class="wompi-phone"><div class="cc">+57</div><input class="wompi-input ok num" placeholder="3001234567" readonly></div>
+              </div>
+              <div class="wompi-field">
+                <label class="wompi-label">TikTok</label>
+                <input class="wompi-input ok" placeholder="@nombreusuario" readonly>
+              </div>
+            </div>
+
+            <div class="wompi-grid2" style="margin-top:10px;">
+              <div>
+                <div class="wompi-label" style="margin-bottom:10px;">¿Qué canales de venta considerarías utilizar para vender a través de Wompi?</div>
+                <div class="wompi-tipo-item" style="margin-bottom:10px;"><span class="wompi-tipo-ico" style="border-radius:4px;background:#fff;border:1.5px solid #d1d5db;color:#0f1117;">☐</span> Punto de venta físico</div>
+                <div class="wompi-tipo-item" style="margin-bottom:10px;"><span class="wompi-tipo-ico" style="border-radius:4px;background:#fff;border:1.5px solid #d1d5db;color:#0f1117;">☐</span> Chats y redes sociales</div>
+                <div class="wompi-tipo-item" style="margin-bottom:10px;"><span class="wompi-tipo-ico" style="border-radius:4px;background:#0f1117;color:#bef264;border:1.5px solid #0f1117;">✔</span> Página web - ecommerce</div>
+                <div class="wompi-tipo-item"><span class="wompi-tipo-ico" style="border-radius:4px;background:#fff;border:1.5px solid #d1d5db;color:#0f1117;">☐</span> App propia</div>
+              </div>
+              <div>
+                <div class="wompi-label">Otros</div>
+                <div class="wompi-field" style="margin-top:8px;">
+                  <label class="wompi-label">¿A quién le vendes?</label>
+                  <input class="wompi-input ok" placeholder="Selecciona uno" readonly>
+                </div>
+                <div class="wompi-field">
+                  <label class="wompi-label">¿Recibiste ayuda de un asesor?</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout tip"><span class="callout-icon">✅</span><span><strong>Cómo completar para TechStore Pro:</strong><br>
+          • <strong>Mínimo 2 redes sociales obligatorias</strong> — completa al menos 2 de: Facebook, Instagram, TikTok. Pueden ser perfiles personales o páginas simples creadas para el ejercicio; Wompi solo valida que existan.<br>
+          • <strong>Página Web</strong> → opcional; si tienes el proyecto desplegado (Render, Vercel, etc.) pon esa URL, si no déjalo vacío.<br>
+          • <strong>WhatsApp Business</strong> → tu número con indicativo +57.<br>
+          • <strong>Canales de venta</strong> → marca <code>Página web - ecommerce</code> (es el caso real de TechStore Pro). Marca también "Chats y redes sociales" si aplica.<br>
+          • <strong>¿A quién le vendes?</strong> → la opción más cercana a "Consumidor final" / "Personas naturales" (B2C).<br>
+          • <strong>¿Recibiste ayuda de un asesor?</strong> → No, salvo que un asesor de Wompi te haya contactado directamente.</span></div>
+        </div></div>
+        <div class="step-item"><div class="step-num">8</div><div class="step-body">
+          <p>El siguiente sub-paso — <strong>"Valor mensual facturado" + "Cantidad de transacciones"</strong> (70% de avance) — pide datos de facturación proyectada.</p>
+
+          <div class="wompi-wizard">
+            <div class="wompi-wizard-progress">Porcentaje de avance en el registro de <strong>(Datos del negocio)</strong>. &nbsp; 70%</div>
+            <div class="wompi-wizard-bar-bg"><div class="wompi-wizard-bar-fill" style="width:70%;"></div></div>
+            <div class="wompi-wizard-title"><span class="ico">🏢</span> Ingresa tus datos del negocio <span class="sub">Registro Persona Natural</span></div>
+
+            <div class="wompi-subtitle-h">Valor mensual facturado de la empresa</div>
+            <div class="wompi-subtitle-sub">Escoge la opción que más se acerque al rango</div>
+            <div class="wompi-radio-grid">
+              <div class="wompi-radio-opt sel"><span class="r"></span> Entre $0 y $27 millones (COP)</div>
+              <div class="wompi-radio-opt"><span class="r"></span> Entre $27 y $100 millones (COP)</div>
+              <div class="wompi-radio-opt"><span class="r"></span> Entre $100 y $600 millones (COP)</div>
+              <div class="wompi-radio-opt"><span class="r"></span> Superior a $600 millones (COP)</div>
+            </div>
+
+            <div class="wompi-subtitle-h">Cantidad de transacciones mensuales de la empresa</div>
+            <div class="wompi-subtitle-sub">¿Cuántas transacciones recibirías mensualmente con Wompi?</div>
+            <div class="wompi-radio-grid">
+              <div class="wompi-radio-opt sel"><span class="r"></span> Menos de 50 transacciones</div>
+              <div class="wompi-radio-opt"><span class="r"></span> Entre 50 y 1.000 transacciones</div>
+              <div class="wompi-radio-opt" style="grid-column:1 / span 1;"><span class="r"></span> Más de 1.000 transacciones</div>
+            </div>
+
+            <div class="wompi-subtitle-h">¿A quién podemos notificar las transacciones?</div>
+            <div class="wompi-field">
+              <label class="wompi-label">Nombre completo</label>
+              <input class="wompi-input ok" placeholder="Tu nombre completo" readonly>
+            </div>
+          </div>
+
+          <div class="callout warn"><span class="callout-icon">⚠️</span><span><strong>Elige los rangos más bajos.</strong> Estos datos alimentan cálculos de comisión y límites de la cuenta. Para un proyecto académico sin ventas reales, usa siempre el rango más bajo — no selecciones rangos de facturación reales de un negocio establecido.</span></div>
+
+          <div class="callout tip"><span class="callout-icon">✅</span><span><strong>Cómo completar para TechStore Pro:</strong><br>
+          • <strong>Valor mensual facturado</strong> → <code>Entre $0 y $27 millones (COP)</code> — el rango más bajo, honesto para un proyecto sin ingresos reales.<br>
+          • <strong>Cantidad de transacciones mensuales</strong> → <code>Menos de 50 transacciones</code> — coherente con pruebas de sandbox.<br>
+          • <strong>¿A quién podemos notificar las transacciones?</strong> → escribe tu nombre completo real, no un dato de ejemplo como "Jhon Doe".</span></div>
+        </div></div>
+        <div class="step-item"><div class="step-num">9</div><div class="step-body">
+          <p>Al completar "Datos del negocio" (etapa 1, check verde ✅) pasas a la <strong>etapa 2: "Datos bancarios"</strong> — aquí defines dónde Wompi te deposita el dinero de las ventas.</p>
+
+          <div class="wompi-wizard">
+            <div class="wompi-wizard-title"><span class="ico">🏦</span> Ingresa los datos bancarios del negocio <span class="sub">Registro Persona Natural</span></div>
+            <p style="font-size:13px;color:#374151;margin-bottom:16px;"><strong>Los desembolsos se realizan a las cuentas bancarias habilitadas para tu país</strong>, la cuenta debe estar a nombre de la empresa (excepto para los Patrimonios Autónomos).</p>
+
+            <div class="wompi-field">
+              <label class="wompi-label">Selecciona cuenta</label>
+              <input class="wompi-input ok" value="Nequi" readonly>
+            </div>
+            <div class="wompi-grid2">
+              <div class="wompi-field">
+                <label class="wompi-label">Número celular</label>
+                <input class="wompi-input ok" placeholder="300 000 0000" readonly>
+              </div>
+              <div class="wompi-field">
+                <label class="wompi-label">Confirmación del número celular</label>
+                <input class="wompi-input ok" placeholder="300 000 0000" readonly>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout tip"><span class="callout-icon">✅</span><span><strong>Cómo completar:</strong><br>
+          • <strong>Selecciona cuenta</strong> → <code>Nequi</code> es la opción más simple para Persona Natural: solo pide un número de celular, no un número de cuenta bancaria tradicional. También puedes elegir cuenta de ahorros/corriente si prefieres.<br>
+          • <strong>Número celular / Confirmación</strong> → deben coincidir exactamente. Usa tu Nequi personal — como el registro es Persona Natural, "a nombre de la empresa" equivale a tu nombre.<br>
+          • Dale a <strong>"Continuar"</strong> para pasar a la etapa 3: "Planes y productos".</span></div>
+        </div></div>
+        <div class="step-item"><div class="step-num">10</div><div class="step-body">
+          <p>La <strong>etapa 3: "Planes y productos"</strong> es la pantalla final del registro — resume las soluciones que Wompi activa automáticamente para tu comercio.</p>
+
+          <div class="wompi-wizard">
+            <div class="wompi-planes-h1">¡Ya cuentas con las mejores soluciones para gestionar el dinero de tu negocio!</div>
+            <div class="wompi-planes-sub"><strong>Descubre todo lo que puedes hacer:</strong> Recibe pagos en línea, vende de forma presencial y paga a terceros, además de acceder a muchas más funcionalidades diseñadas para hacer crecer tu negocio hoy mismo!</div>
+
+            <div class="wompi-planes-grid">
+              <div class="wompi-plan-card">
+                <div class="wompi-plan-pct">92% de avance ⓘ</div>
+                <div class="wompi-plan-title">Recibir pagos en línea</div>
+                <div class="wompi-plan-desc">Dale a tus clientes la libertad de elegir cómo pagar. <strong>Comienza a recibir pagos de manera fácil, rápida y como nunca antes.</strong></div>
+                <div class="wompi-plan-link">Medios de pago disponibles ⌄</div>
+              </div>
+              <div class="wompi-plan-card">
+                <div class="wompi-plan-pct">83% de avance ⓘ</div>
+                <div class="wompi-plan-title">Venta presencial</div>
+                <div class="wompi-plan-desc">Descarga la App de Wompi y empieza a recibir pagos desde cualquier lugar.</div>
+                <div class="wompi-plan-link">Funcionalidades de la App ⌄</div>
+              </div>
+              <div class="wompi-plan-card">
+                <div class="wompi-plan-pct">78% de avance ⓘ</div>
+                <div class="wompi-plan-title">Pagos a terceros</div>
+                <div class="wompi-plan-desc">Gestiona todos tus pagos de forma simple y eficiente. <strong>Paga a proveedores, paga nómina y mucho más.</strong></div>
+                <div class="wompi-plan-link">Conoce la tarifa base ⌄</div>
+              </div>
+            </div>
+            <p style="font-size:11px;color:#9ca3af;margin-bottom:14px;">El porcentaje indicado se aplica al valor de la transacción y está sujeto a posibles modificaciones.</p>
+          </div>
+
+          <div class="callout tip"><span class="callout-icon">✅</span><span><strong>Solo necesitas "Recibir pagos en línea".</strong><br>
+          Las 3 tarjetas son soluciones que Wompi activa automáticamente — no hay que elegir ni desactivar nada. Para TechStore Pro solo usaremos <strong>"Recibir pagos en línea"</strong> (el Widget que integramos en el Paso 4 de esta guía). "Venta presencial" y "Pagos a terceros" quedan activas pero no las usa este proyecto.<br><br>
+          Da clic en <strong>"Activar y continuar"</strong> para terminar el registro y entrar por primera vez al dashboard de Wompi.</span></div>
+        </div></div>
+        <div class="step-item"><div class="step-num">11</div><div class="step-body">
+          <p>Al ingresar por primera vez verás el dashboard de Wompi. En la parte superior hay un selector de ambiente: cambiar a <strong>Sandbox</strong> (aparece como "Pruebas" o "Sandbox" en la esquina superior).</p>
+          <div class="callout warn"><span class="callout-icon">⚠️</span><span><strong>Importante:</strong> Asegúrate de estar en modo <strong>Sandbox / Pruebas</strong>. Las llaves de producción cobran dinero real. Las llaves de sandbox tienen prefijo <code>pub_test_</code> y <code>test_integrity_</code>.</span></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">0.2 — Obtener las 4 llaves del panel</div>
+      <p style="color:var(--txt-dim);font-size:13px;margin-bottom:16px;">En el panel de Wompi (modo Sandbox): ir a <strong>Desarrolladores → Llaves de API</strong>. Verás una tabla con todas las llaves. Copiar estas cuatro:</p>
+
+      <div style="display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:16px;">
+        <div style="background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:16px 20px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <span style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--accent-glow);color:var(--accent);padding:2px 8px;border-radius:4px;">Llave 1</span>
+            <span style="font-size:13px;font-weight:700;color:var(--txt);">Llave pública (Public Key)</span>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--teal);margin-bottom:6px;">Nombre en el panel: <strong>"Llave pública"</strong></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#98c379;">Prefijo: pub_test_XXXXXXXXXXXXXXXX</div>
+          <div style="font-size:12px;color:var(--txt-dim);margin-top:6px;">Usada en: el Widget de Wompi en el frontend · se puede exponer públicamente</div>
+          <div style="font-size:11px;font-weight:700;color:var(--accent);margin-top:8px;">→ Guardar como: WOMPI_PUBLIC_KEY en .env</div>
+        </div>
+
+        <div style="background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:8px;padding:16px 20px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <span style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--red-bg);color:var(--red);padding:2px 8px;border-radius:4px;">Llave 2</span>
+            <span style="font-size:13px;font-weight:700;color:var(--txt);">Llave privada (Private Key)</span>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--teal);margin-bottom:6px;">Nombre en el panel: <strong>"Llave privada"</strong></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#98c379;">Prefijo: prv_test_XXXXXXXXXXXXXXXX</div>
+          <div style="font-size:12px;color:var(--txt-dim);margin-top:6px;">Usada en: el backend, para <strong>consultar</strong> el estado de una transacción en la API de Wompi (el polling del Paso 3) · <strong>NUNCA enviar al frontend</strong></div>
+          <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:8px;">→ Guardar como: WOMPI_PRIVATE_KEY en .env</div>
+        </div>
+
+        <div style="background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--yellow);border-radius:8px;padding:16px 20px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <span style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--yellow-bg);color:var(--yellow);padding:2px 8px;border-radius:4px;">Llave 3</span>
+            <span style="font-size:13px;font-weight:700;color:var(--txt);">Secreto de integridad (Integrity Secret)</span>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--teal);margin-bottom:6px;">Nombre en el panel: <strong>"Secreto de integridad"</strong></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#98c379;">Prefijo: test_integrity_XXXXXXXXXXXXXXXX</div>
+          <div style="font-size:12px;color:var(--txt-dim);margin-top:6px;">Usada en: el backend para firmar el Widget · <strong>NUNCA enviar al frontend</strong></div>
+          <div style="font-size:11px;font-weight:700;color:var(--yellow);margin-top:8px;">→ Guardar como: WOMPI_INTEGRITY_SECRET en .env</div>
+        </div>
+
+        <div style="background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--txt-dim);border-radius:8px;padding:16px 20px;opacity:.8;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <span style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--surface);color:var(--txt-dim);padding:2px 8px;border-radius:4px;border:1px solid var(--border);">Llave 4 (opcional en dev)</span>
+            <span style="font-size:13px;font-weight:700;color:var(--txt);">Secreto de eventos (Events Secret)</span>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--teal);margin-bottom:6px;">Nombre en el panel: <strong>"Secreto de eventos"</strong></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#98c379;">Prefijo: test_events_XXXXXXXXXXXXXXXX</div>
+          <div style="font-size:12px;color:var(--txt-dim);margin-top:6px;">Usada en: verificar webhooks en producción · en desarrollo el polling no la necesita</div>
+          <div style="font-size:11px;font-weight:700;color:var(--txt-dim);margin-top:8px;">→ Guardar como: WOMPI_EVENTS_SECRET en .env (puede quedar vacío en dev)</div>
+        </div>
+      </div>
+
+      <div class="callout warn"><span class="callout-icon">⚠️</span><span><strong>No confundir la llave pública con la privada.</strong> El Widget del frontend usa la pública (<code>pub_test_...</code>). La consulta de estado que hace el backend en el Paso 3 usa la <strong>privada</strong> (<code>prv_test_...</code>) — es un error común usar la pública ahí, y Wompi lo rechaza en silencio (el <code>fetch</code> no lanza excepción, solo responde con error HTTP), dejando la Transaccion en <code>PENDING</code> para siempre aunque el pago sí se haya aprobado.</span></div>
+
+      <div class="callout warn"><span class="callout-icon">⚠️</span><span><strong>¿No ves "Secreto de integridad" en el panel?</strong><br>
+      Verifica que estás en modo <strong>Sandbox</strong> (no producción). También es posible que aparezca como <em>"Integrity secret"</em> en inglés. Si el panel muestra solo una llave, busca el botón <strong>"Mostrar todas las llaves"</strong> o <strong>"Más opciones"</strong>.</span></div>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">0.3 — Pegar las llaves en el archivo <code>.env</code></div>
+      <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">backend/.env</span><span class="code-tag yellow">agregar al final</span></div><pre><span class="c"># ── ya existía ─────────────────────────────────────────</span>
+<span class="n">MONGO_URI</span>=mongodb://localhost:27017/techstore_db
+<span class="n">JWT_SECRET</span>=tu_jwt_secreto_seguro
+<span class="n">PORT</span>=3000
+
+<span class="c"># ── Wompi Sandbox — pegar tus llaves del panel ─────────</span>
+<span class="n">WOMPI_PUBLIC_KEY</span>=pub_test_<span class="edit">pegar_aqui_tu_llave_publica</span>
+<span class="n">WOMPI_PRIVATE_KEY</span>=prv_test_<span class="edit">pegar_aqui_tu_llave_privada</span>
+<span class="n">WOMPI_INTEGRITY_SECRET</span>=test_integrity_<span class="edit">pegar_aqui_tu_secreto_integridad</span>
+<span class="n">WOMPI_EVENTS_SECRET</span>=test_events_<span class="edit">pegar_aqui_tu_secreto_eventos</span>
+
+<span class="c"># Ejemplo real de cómo se ven (son más largas):</span>
+<span class="c"># WOMPI_PUBLIC_KEY=pub_test_TYld0TKr4chIS8TbArF0lDp85rLkyX35</span>
+<span class="c"># WOMPI_PRIVATE_KEY=prv_test_doAGAP1GUE0NN5dM8neYXse2y7SftRQO</span>
+<span class="c"># WOMPI_INTEGRITY_SECRET=test_integrity_Ck1W1N3nS3YwdpitCdiPBFrz0Zabvlnn</span>
+<span class="c"># WOMPI_EVENTS_SECRET=test_events_qBjWDMVdomom7TB6zuSCMfbhsu3iqodw</span></pre></div>
+
+      <div class="callout warn"><span class="callout-icon">⚠️</span><span><strong>No poner comillas en el .env.</strong> Las variables van sin comillas — <code>WOMPI_PUBLIC_KEY=pub_test_xyz</code>, no <code>WOMPI_PUBLIC_KEY="pub_test_xyz"</code>. Las comillas se incluirían como parte del valor.</span></div>
+    </div>
+
+    <div class="callout ok"><span class="callout-icon">✅</span><span><strong>Verificar:</strong> Guardar <code>.env</code> → nodemon reinicia → consola del servidor no muestra errores · las cuatro variables se ven en el archivo</span></div>
+  </section>
+
+  <!-- ════ PASO 1 ════ -->
+  <section class="section" id="paso1" data-step="paso1">
+    <div class="section-header">
+      <span class="step-badge">Paso 1 · Modelos</span>
+      <h2 class="section-title">Modelo <code>Orden.js</code> y modelo <code>Transaccion.js</code></h2>
+    </div>
+    <p style="color:var(--txt-dim);font-size:14px;margin-bottom:20px;">Separamos la <strong>transacción de Wompi</strong> del <strong>pedido</strong>. La transacción se crea antes del pago (con estado PENDING). La orden solo existe si el pago fue aprobado (APPROVED).</p>
+
+    <div class="callout info"><span class="callout-icon">💡</span><span><strong>¿Por qué dos modelos?</strong><br>
+    La transacción representa el intento de pago. Si el pago falla → transacción DECLINED, la orden nunca se crea. Si el pago se aprueba → orden PAGO_CONFIRMADO. Esto evita tener órdenes "fantasma" con estado pendiente que nunca se pagaron.</span></div>
+
+    <div class="subsec">
+      <div class="subsec-title">1.1 — Modelo Orden</div>
+      <div class="callout warn"><span class="callout-icon">⚠️</span><span><strong>En este proyecto <code>backend/models/Orden.js</code> YA EXISTE</strong> con <code>usuario</code>, <code>productos</code> (<code>producto</code> + <code>cantidad</code>), <code>total</code> y un <code>estado</code> con enum <code>['pendiente', 'procesando', 'enviado', 'entregado']</code>. <strong>No lo reemplaces</strong> — solo agrégale 2 campos nuevos y un valor al enum existente.</span></div>
+      <p style="color:var(--txt-dim);font-size:13px;margin:14px 0 8px;">Editar <code>backend/models/Orden.js</code> — dentro del campo <code>estado</code>, agregar <code>'PAGO_CONFIRMADO'</code> al arreglo <code>enum</code>, y después del campo <code>estado</code> agregar los 2 campos de Wompi:</p>
+      <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">backend/models/Orden.js — editar campo existente</span><span class="code-tag yellow">modificar, no reemplazar</span></div><pre><span class="c">// Estado del ciclo de vida de la orden</span>
+  estado: {
+    type: <span class="n">String</span>,
+    default: <span class="s">'pendiente'</span>,
+    enum: [<span class="s">'pendiente'</span>, <span class="s">'procesando'</span>, <span class="s">'enviado'</span>, <span class="s">'entregado'</span>, <span class="edit">'PAGO_CONFIRMADO'</span>]  <span class="c">// ← agregar este valor</span>
+  },
+
+  <span class="c">// Datos de Wompi — se llenan solo cuando el pago fue aprobado</span>
+  <span class="edit">wompiTransactionId: { type: String },
+  wompiReference:     { type: String }</span></pre></div>
+      <p style="color:var(--txt-dim);font-size:13px;margin-top:8px;">El resto del archivo (<code>usuario</code>, <code>productos</code>, <code>total</code>, <code>timestamps</code>) se deja exactamente igual.</p>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">1.2 — Modelo Transaccion (guarda el intento de pago)</div>
+      <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">backend/models/Transaccion.js</span><span class="code-tag green">nuevo archivo</span></div><pre><span class="k">const</span> <span class="n">mongoose</span> = <span class="f">require</span>(<span class="s">'mongoose'</span>);
+
+<span class="k">const</span> <span class="n">TransaccionSchema</span> = <span class="k">new</span> <span class="f">mongoose.Schema</span>({
+  wompiReference: { type: <span class="n">String</span>, unique: <span class="k">true</span>, required: <span class="k">true</span> },
+  amountInCents:  { type: <span class="n">Number</span>, required: <span class="k">true</span> },
+  currency:       { type: <span class="n">String</span>, default: <span class="s">'COP'</span> },
+  status: {
+    type: <span class="n">String</span>,
+    enum: [<span class="s">'PENDING'</span>, <span class="s">'APPROVED'</span>, <span class="s">'DECLINED'</span>, <span class="s">'VOIDED'</span>, <span class="s">'ERROR'</span>],
+    default: <span class="s">'PENDING'</span>
+  },
+  wompiTransactionId: { type: <span class="n">String</span> },
+  orden:              { type: <span class="n">mongoose.Schema.Types.ObjectId</span>, ref: <span class="s">'Orden'</span> },
+  <span class="c">// Datos del carrito guardados temporalmente hasta que Wompi confirme</span>
+  pendingOrderData: {
+    usuario:   <span class="n">mongoose.Schema.Types.ObjectId</span>,
+    productos: <span class="n">Array</span>,
+    total:     <span class="n">Number</span>
+  }
+}, { timestamps: <span class="k">true</span> });
+
+module.exports = <span class="f">mongoose.model</span>(<span class="s">'Transaccion'</span>, <span class="n">TransaccionSchema</span>);</pre></div>
+    </div>
+    <div class="callout ok"><span class="callout-icon">✅</span><span>Ambos modelos guardados — nodemon reinicia sin errores</span></div>
+  </section>
+
+  <!-- ════ PASO 2 ════ -->
+  <section class="section" id="paso2" data-step="paso2">
+    <div class="section-header">
+      <span class="step-badge">Paso 2 · Ruta — firma</span>
+      <h2 class="section-title"><code>POST /api/pagos/firma</code> — generar firma para el Widget</h2>
+    </div>
+    <p style="color:var(--txt-dim);font-size:14px;margin-bottom:20px;">El Widget de Wompi no acepta montos sin una firma criptográfica. Esta ruta calcula esa firma en el backend (donde está el secreto) y la devuelve al frontend junto con la referencia.</p>
+
+    <div class="callout info"><span class="callout-icon">💡</span><span><strong>Fórmula oficial de Wompi:</strong><br>
+    <code>SHA256(reference + amountInCents + currency + WOMPI_INTEGRITY_SECRET)</code><br>
+    El Widget verifica esa firma antes de mostrar el formulario de tarjeta. Si no coincide → el Widget no aparece.</span></div>
+
+    <div class="callout warn"><span class="callout-icon">⚠️</span><span><strong>Este archivo es nuevo — se crea, no se actualiza.</strong> Pero 3 detalles del código cambian frente a una guía Wompi genérica, porque así está construido este proyecto en particular:</span></div>
+    <div class="table-wrap" style="margin:12px 0 16px;">
+      <table>
+        <thead><tr><th>Genérico (no usar)</th><th>Real de este proyecto (usar)</th><th>Por qué</th></tr></thead>
+        <tbody>
+          <tr><td><code>backend/routes/pago.routes.js</code></td><td><code>backend/routes/pago.js</code></td><td>Las rutas de este proyecto no llevan sufijo <code>.routes</code> — mismo patrón que <code>auth.js</code>, <code>ordenes.js</code>, <code>productos.js</code></td></tr>
+          <tr><td><code>require('../middlewares/auth.middleware')</code> con <code>{ verificarToken }</code></td><td><code>require('../middleware/auth')</code> sin destructuring</td><td>La carpeta es <code>middleware</code> (sin "s") y exporta la función directamente, no un objeto</td></tr>
+          <tr><td><code>req.usuario._id</code></td><td><code>req.usuario.id</code></td><td>Así lo expone el middleware <code>verificarToken</code> real de este proyecto</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">backend/routes/pago.js — con los 3 puntos de la tabla ya aplicados</span><span class="code-tag green">nuevo archivo</span></div><pre><span class="k">const</span> <span class="n">express</span>        = <span class="f">require</span>(<span class="s">'express'</span>);
+<span class="k">const</span> <span class="n">crypto</span>         = <span class="f">require</span>(<span class="s">'crypto'</span>);   <span class="c">// nativo de Node</span>
+<span class="k">const</span> <span class="n">Orden</span>          = <span class="f">require</span>(<span class="s">'../models/Orden'</span>);
+<span class="k">const</span> <span class="n">Transaccion</span>    = <span class="f">require</span>(<span class="s">'../models/Transaccion'</span>);
+<span class="k">const</span> <span class="n">verificarToken</span> = <span class="f">require</span>(<span class="s">'../middleware/auth'</span>);
+<span class="k">const</span> <span class="n">router</span>         = <span class="f">express.Router</span>();
+
+<span class="c">// POST /api/pagos/firma — generar firma de integridad para el Widget de Wompi</span>
+<span class="c">// Valida el carrito, genera una referencia única, calcula la firma SHA256</span>
+<span class="c">// y guarda los datos del pedido en Transaccion con estado PENDING.</span>
+<span class="n">router</span>.<span class="f">post</span>(<span class="s">'/firma'</span>, <span class="n">verificarToken</span>, <span class="k">async</span> (req, res) => {
+  <span class="k">const</span> { productos, total } = req.body;
+
+  <span class="k">if</span> (!productos?.length || !total) {
+    <span class="k">return</span> res.<span class="f">status</span>(400).<span class="f">json</span>({ error: <span class="s">'Carrito vacío o total inválido'</span> });
+  }
+
+  <span class="k">try</span> {
+    <span class="c">// 1. Referencia única para esta transacción</span>
+    <span class="k">const</span> reference = <span class="s">`TS-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`</span>;
+    <span class="k">const</span> amountInCents = <span class="f">Math.round</span>(total * 100);
+    <span class="k">const</span> currency = <span class="s">'COP'</span>;
+
+    <span class="c">// 2. Calcular firma de integridad — fórmula oficial Wompi</span>
+    <span class="k">const</span> raw = <span class="s">`${reference}${amountInCents}${currency}${process.env.WOMPI_INTEGRITY_SECRET}`</span>;
+    <span class="k">const</span> signature = <span class="n">crypto</span>.<span class="f">createHash</span>(<span class="s">'sha256'</span>).<span class="f">update</span>(raw).<span class="f">digest</span>(<span class="s">'hex'</span>);
+
+    <span class="c">// 3. Guardar datos del carrito en la Transaccion con estado PENDING</span>
+    <span class="c">// ⚠️ req.usuario.id (no ._id) — así lo expone el middleware real de este proyecto</span>
+    <span class="k">await</span> <span class="n">Transaccion</span>.<span class="f">create</span>({
+      wompiReference: reference, amountInCents, currency,
+      status: <span class="s">'PENDING'</span>,
+      pendingOrderData: { usuario: req.usuario.id, productos, total }
+    });
+
+    <span class="c">// 4. Devolver datos al Widget de Wompi en el frontend</span>
+    res.<span class="f">json</span>({
+      reference, amountInCents, currency, signature,
+      publicKey: process.env.WOMPI_PUBLIC_KEY
+    });
+
+  } <span class="k">catch</span> (err) {
+    <span class="f">console.error</span>(err);
+    res.<span class="f">status</span>(500).<span class="f">json</span>({ error: <span class="s">'Error al generar la firma'</span> });
+  }
+});
+
+<span class="c">// ── GET /api/pagos/estado/:reference ─────────────────────</span>
+<span class="c">// El frontend hace polling a esta ruta cada 3 segundos para saber si el</span>
+<span class="c">// pago fue aprobado. No necesita webhook ni ngrok en desarrollo.</span>
+<span class="n">router</span>.<span class="f">get</span>(<span class="s">'/estado/:reference'</span>, <span class="n">verificarToken</span>, <span class="k">async</span> (req, res) => {
+  <span class="k">try</span> {
+    <span class="k">const</span> tx = <span class="k">await</span> <span class="n">Transaccion</span>.<span class="f">findOne</span>({ wompiReference: req.params.reference });
+    <span class="k">if</span> (!tx) <span class="k">return</span> res.<span class="f">status</span>(404).<span class="f">json</span>({ error: <span class="s">'Transacción no encontrada'</span> });
+    res.<span class="f">json</span>({ status: tx.status, ordenId: tx.orden ?? <span class="k">null</span> });
+  } <span class="k">catch</span> (err) {
+    res.<span class="f">status</span>(500).<span class="f">json</span>({ error: <span class="s">'Error interno'</span> });
+  }
+});
+
+<span class="c">// ── POST /webhook/wompi ───────────────────────────────────</span>
+<span class="c">// Wompi llama a esta ruta en producción (cuando hay servidor público).</span>
+<span class="c">// En desarrollo local el polling del frontend cubre esta función.</span>
+<span class="n">router</span>.<span class="f">post</span>(<span class="s">'/webhook'</span>, <span class="k">async</span> (req, res) => {
+  <span class="k">const</span> { signature, timestamp, data } = req.body;
+  <span class="k">const</span> secret = process.env.WOMPI_EVENTS_SECRET;
+  <span class="k">if</span> (!secret) <span class="k">return</span> res.<span class="f">status</span>(200).<span class="f">json</span>({ ok: <span class="k">true</span> }); <span class="c">// sin secreto → modo dev, ignorar</span>
+
+  <span class="c">// Verificar firma del webhook (fórmula oficial Wompi)</span>
+  <span class="k">const</span> tx = data?.transaction;
+  <span class="k">if</span> (!tx) <span class="k">return</span> res.<span class="f">status</span>(400).<span class="f">json</span>({ error: <span class="s">'Payload inválido'</span> });
+
+  <span class="k">const</span> props = (signature?.properties || []).<span class="f">map</span>((prop) => {
+    <span class="k">const</span> path = prop.<span class="f">split</span>(<span class="s">'.'</span>).<span class="f">slice</span>(1);
+    <span class="k">let</span> v = tx; <span class="k">for</span> (<span class="k">const</span> k <span class="k">of</span> path) v = v?.[k]; <span class="k">return</span> v;
+  }).<span class="f">join</span>(<span class="s">''</span>);
+
+  <span class="k">const</span> computed = <span class="n">crypto</span>.<span class="f">createHash</span>(<span class="s">'sha256'</span>)
+    .<span class="f">update</span>(<span class="s">`${props}${timestamp}${secret}`</span>).<span class="f">digest</span>(<span class="s">'hex'</span>);
+  <span class="k">if</span> (computed !== signature?.checksum) <span class="k">return</span> res.<span class="f">status</span>(400).<span class="f">json</span>({ error: <span class="s">'Firma inválida'</span> });
+
+  <span class="k">const</span> transaccion = <span class="k">await</span> <span class="n">Transaccion</span>.<span class="f">findOne</span>({ wompiReference: tx.reference });
+  <span class="k">if</span> (!transaccion) <span class="k">return</span> res.<span class="f">status</span>(404).<span class="f">json</span>({ error: <span class="s">'Transacción no encontrada'</span> });
+
+  transaccion.status = tx.status;
+  transaccion.wompiTransactionId = tx.id;
+
+  <span class="k">if</span> (tx.status === <span class="s">'APPROVED'</span> && !transaccion.orden) {
+    <span class="k">const</span> pod = transaccion.pendingOrderData;
+    <span class="k">const</span> orden = <span class="k">await</span> <span class="n">Orden</span>.<span class="f">create</span>({
+      usuario: pod.usuario, productos: pod.productos, total: pod.total,
+      wompiTransactionId: tx.id, wompiReference: tx.reference,
+      estado: <span class="s">'PAGO_CONFIRMADO'</span>
+    });
+    transaccion.orden = orden._id;
+  }
+
+  <span class="k">await</span> transaccion.<span class="f">save</span>();
+  res.<span class="f">json</span>({ ok: <span class="k">true</span> });
+});
+
+module.exports = <span class="n">router</span>;</pre></div>
+
+    <div class="subsec" style="margin-top:20px;">
+      <div class="subsec-title">2.1 — Registrar en <code>server.js</code></div>
+      <div class="callout warn"><span class="callout-icon">⚠️</span><span><strong><code>backend/server.js</code> YA EXISTE — se edita, no se reemplaza.</strong> Se agregan exactamente 2 líneas nuevas, cada una junto al bloque equivalente que ya tiene el archivo:</span></div>
+      <div class="table-wrap" style="margin:12px 0 16px;">
+        <table>
+          <thead><tr><th>Qué agregar</th><th>Dónde va</th><th>Junto a qué línea existente</th></tr></thead>
+          <tbody>
+            <tr><td><code>const pagoRoutes = require('./routes/pago');</code></td><td>Arriba, con los demás <code>require</code> de rutas</td><td>Después de <code>const ordenesRoutes = require('./routes/ordenes');</code></td></tr>
+            <tr><td><code>app.use('/api/pagos', pagoRoutes);</code></td><td>Abajo, con los demás <code>app.use</code> de rutas</td><td>Después de <code>app.use('/api/ordenes', ordenesRoutes);</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">backend/server.js</span><span class="code-tag yellow">agregar</span></div><pre><span class="c">// junto a los otros require de rutas:</span>
+<span class="k">const</span> <span class="n">authRoutes</span>      = <span class="f">require</span>(<span class="s">'./routes/auth'</span>);
+<span class="k">const</span> <span class="n">productosRoutes</span> = <span class="f">require</span>(<span class="s">'./routes/productos'</span>);
+<span class="k">const</span> <span class="n">ordenesRoutes</span>   = <span class="f">require</span>(<span class="s">'./routes/ordenes'</span>);
+<span class="k">const</span> <span class="n">pagoRoutes</span>      = <span class="f">require</span>(<span class="s">'./routes/pago'</span>);  <span class="edit">// ← AGREGAR S18A</span>
+
+<span class="c">// ...</span>
+
+<span class="c">// junto a los otros app.use de rutas:</span>
+app.<span class="f">use</span>(<span class="s">'/api/auth'</span>, <span class="n">authRoutes</span>);
+app.<span class="f">use</span>(<span class="s">'/api/productos'</span>, <span class="n">productosRoutes</span>);
+app.<span class="f">use</span>(<span class="s">'/api/ordenes'</span>, <span class="n">ordenesRoutes</span>);
+app.<span class="f">use</span>(<span class="s">'/api/pagos'</span>, <span class="n">pagoRoutes</span>);  <span class="edit">// ← AGREGAR S18A</span>
+<span class="c">// El webhook queda expuesto en /api/pagos/webhook dentro del mismo router</span></pre></div>
+      <p style="color:var(--txt-dim);font-size:13px;margin-top:8px;">Nada más del archivo cambia — no se toca <code>cors()</code>, <code>express.json()</code>, la conexión a MongoDB ni <code>app.listen()</code>.</p>
+      <div class="callout ok"><span class="callout-icon">✅</span><span>Thunder Client: POST <code>/api/pagos/firma</code> con token → responde <code>&#123; reference, amountInCents, signature, publicKey &#125;</code></span></div>
+    </div>
+  </section>
+
+  <!-- ════ PASO 3 ════ -->
+  <section class="section" id="paso3" data-step="paso3">
+    <div class="section-header">
+      <span class="step-badge">Paso 3 · Backend — confirmar APPROVED</span>
+      <h2 class="section-title">Endpoint de polling: <code>GET /api/pagos/estado/:reference</code></h2>
+    </div>
+    <p style="color:var(--txt-dim);font-size:14px;margin-bottom:20px;">Ya creaste este endpoint en el Paso 2, pero le falta una pieza — esta sección la completa <strong>editando <code>pago.js</code></strong>, no es un archivo nuevo.</p>
+
+    <div class="callout info"><span class="callout-icon">💡</span><span><strong>¿Qué es polling?</strong><br>
+    Polling = el frontend pregunta cada X segundos "¿ya cambió algo?". Es la técnica más sencilla y funciona perfecto en desarrollo local sin infraestructura extra.</span></div>
+
+    <div class="callout warn"><span class="callout-icon">⚠️</span><span><strong>La pieza que faltaba:</strong> ¿quién actualiza la Transaccion en MongoDB cuando Wompi aprueba el pago?<br>
+    En producción → el webhook de Wompi (necesita una URL pública). En desarrollo sin ngrok, <strong>nadie llama al webhook</strong>, así que sin arreglar esto la Transaccion se queda en <code>PENDING</code> para siempre. La solución: mientras el endpoint de polling vea <code>PENDING</code>, el propio backend le pregunta a la <strong>API pública de Wompi</strong> por esa referencia, y si ya hay un resultado, actualiza la Transaccion ahí mismo — antes de responder al frontend.</span></div>
+
+    <div class="flujo-grid" style="margin-bottom:20px;">
+      <div class="flujo-item"><div class="flujo-num">Widget</div><div class="flujo-txt">Usuario paga en el Widget embebido</div></div>
+      <div class="flujo-arrow">→</div>
+      <div class="flujo-item"><div class="flujo-num">Polling</div><div class="flujo-txt">Frontend consulta /api/pagos/estado cada 3 seg</div></div>
+      <div class="flujo-arrow">→</div>
+      <div class="flujo-item"><div class="flujo-num">Backend</div><div class="flujo-txt">Si sigue PENDING, consulta la API de Wompi con esa referencia</div></div>
+      <div class="flujo-arrow">→</div>
+      <div class="flujo-item"><div class="flujo-num">MongoDB</div><div class="flujo-txt">Transaccion actualizada (y Orden creada si fue APPROVED)</div></div>
+    </div>
+
+    <p style="color:var(--txt-dim);font-size:13px;margin-bottom:8px;">Editar <code>backend/routes/pago.js</code> — agregar una función compartida <code>confirmarAprobado</code> (la reutiliza también el webhook) y hacer que <code>GET /estado/:reference</code> consulte Wompi cuando el estado sigue <code>PENDING</code>:</p>
+
+    <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">backend/routes/pago.js</span><span class="code-tag yellow">editar</span></div><pre><span class="c">// Crea la Orden cuando Wompi confirma un pago APPROVED (usada por el polling y por el webhook)</span>
+<span class="k">async function</span> <span class="f">confirmarAprobado</span>(transaccion, wompiTx) {
+  transaccion.status = wompiTx.status;
+  transaccion.wompiTransactionId = wompiTx.id;
+
+  <span class="k">if</span> (wompiTx.status === <span class="s">'APPROVED'</span> && !transaccion.orden) {
+    <span class="k">const</span> pod = transaccion.pendingOrderData;
+    <span class="k">const</span> orden = <span class="k">await</span> <span class="n">Orden</span>.<span class="f">create</span>({
+      usuario: pod.usuario, productos: pod.productos, total: pod.total,
+      wompiTransactionId: wompiTx.id, wompiReference: wompiTx.reference,
+      estado: <span class="s">'PAGO_CONFIRMADO'</span>
+    });
+    transaccion.orden = orden._id;
+  }
+
+  <span class="k">await</span> transaccion.<span class="f">save</span>();
+}
+
+<span class="c">// GET /api/pagos/estado/:reference — polling</span>
+<span class="n">router</span>.<span class="f">get</span>(<span class="s">'/estado/:reference'</span>, <span class="n">verificarToken</span>, <span class="k">async</span> (req, res) => {
+  <span class="k">try</span> {
+    <span class="k">const</span> tx = <span class="k">await</span> <span class="n">Transaccion</span>.<span class="f">findOne</span>({ wompiReference: req.params.reference });
+    <span class="k">if</span> (!tx) <span class="k">return</span> res.<span class="f">status</span>(404).<span class="f">json</span>({ error: <span class="s">'Transacción no encontrada'</span> });
+
+    <span class="k">if</span> (tx.status === <span class="s">'PENDING'</span>) {
+      <span class="c">// Sin webhook (no hay ngrok), preguntamos directamente a Wompi por esta referencia.</span>
+      <span class="c">// ⚠️ Requiere la llave PRIVADA (WOMPI_PRIVATE_KEY), no la pública.</span>
+      <span class="k">const</span> wompiRes = <span class="k">await</span> <span class="f">fetch</span>(
+        <span class="s">`https://sandbox.wompi.co/v1/transactions?reference=${tx.wompiReference}`</span>,
+        { headers: { Authorization: <span class="s">`Bearer ${process.env.WOMPI_PRIVATE_KEY}`</span> } }
+      );
+
+      <span class="k">if</span> (!wompiRes.ok) {
+        <span class="f">console.error</span>(<span class="s">'Error consultando Wompi:'</span>, wompiRes.status, <span class="k">await</span> wompiRes.<span class="f">text</span>());
+      } <span class="k">else</span> {
+        <span class="k">const</span> wompiJson = <span class="k">await</span> wompiRes.<span class="f">json</span>();
+        <span class="k">const</span> wompiTx = wompiJson.data?.[0];
+
+        <span class="k">if</span> (wompiTx && wompiTx.status !== <span class="s">'PENDING'</span>) {
+          <span class="k">await</span> <span class="f">confirmarAprobado</span>(tx, wompiTx);
+        }
+      }
+    }
+
+    res.<span class="f">json</span>({ status: tx.status, ordenId: tx.orden ?? <span class="k">null</span> });
+  } <span class="k">catch</span> (err) {
+    <span class="f">console.error</span>(err);
+    res.<span class="f">status</span>(500).<span class="f">json</span>({ error: <span class="s">'Error interno'</span> });
+  }
+});</pre></div>
+
+    <p style="color:var(--txt-dim);font-size:13px;margin:14px 0 8px;">Y en el webhook (<code>router.post('/webhook', ...)</code>), reemplazar el bloque que actualiza <code>transaccion</code> manualmente por una sola línea que reutiliza la misma función:</p>
+
+    <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">backend/routes/pago.js — dentro de POST /webhook</span><span class="code-tag yellow">editar</span></div><pre><span class="k">const</span> transaccion = <span class="k">await</span> <span class="n">Transaccion</span>.<span class="f">findOne</span>({ wompiReference: tx.reference });
+<span class="k">if</span> (!transaccion) <span class="k">return</span> res.<span class="f">status</span>(404).<span class="f">json</span>({ error: <span class="s">'Transacción no encontrada'</span> });
+
+<span class="k">await</span> <span class="f">confirmarAprobado</span>(transaccion, tx);
+res.<span class="f">json</span>({ ok: <span class="k">true</span> });</pre></div>
+
+    <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">Respuesta de GET /api/pagos/estado/:reference</span></div><pre><span class="c">// Mientras el usuario está en el Widget:</span>
+{ <span class="n">status</span>: <span class="s">"PENDING"</span>, <span class="n">ordenId</span>: <span class="k">null</span> }
+
+<span class="c">// Después de pago aprobado (la consulta directa a Wompi actualizó la BD):</span>
+{ <span class="n">status</span>: <span class="s">"APPROVED"</span>, <span class="n">ordenId</span>: <span class="s">"64abc123..."</span> }
+
+<span class="c">// Si el pago fue rechazado:</span>
+{ <span class="n">status</span>: <span class="s">"DECLINED"</span>, <span class="n">ordenId</span>: <span class="k">null</span> }</pre></div>
+
+    <div class="subsec">
+      <div class="subsec-title">Archivo completo — <code>backend/routes/pago.js</code> después del Paso 3</div>
+      <p style="color:var(--txt-dim);font-size:13px;margin-bottom:12px;">Así debe quedar el archivo entero. Los comentarios <code>[PASO 2]</code> marcan lo que ya tenías, <code>[PASO 3 — NUEVO]</code> lo que se agrega:</p>
+      <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">backend/routes/pago.js</span><span class="code-tag teal">archivo completo</span></div><pre><span class="k">const</span> <span class="n">express</span>        = <span class="f">require</span>(<span class="s">'express'</span>);
+<span class="k">const</span> <span class="n">crypto</span>         = <span class="f">require</span>(<span class="s">'crypto'</span>);   <span class="c">// nativo de Node</span>
+<span class="k">const</span> <span class="n">Orden</span>          = <span class="f">require</span>(<span class="s">'../models/Orden'</span>);
+<span class="k">const</span> <span class="n">Transaccion</span>    = <span class="f">require</span>(<span class="s">'../models/Transaccion'</span>);
+<span class="k">const</span> <span class="n">verificarToken</span> = <span class="f">require</span>(<span class="s">'../middleware/auth'</span>);
+<span class="k">const</span> <span class="n">router</span>         = <span class="f">express.Router</span>();
+
+<span class="c">// [PASO 2] POST /api/pagos/firma — generar firma de integridad para el Widget de Wompi</span>
+<span class="n">router</span>.<span class="f">post</span>(<span class="s">'/firma'</span>, <span class="n">verificarToken</span>, <span class="k">async</span> (req, res) => {
+  <span class="k">const</span> { productos, total } = req.body;
+
+  <span class="k">if</span> (!productos?.length || !total) {
+    <span class="k">return</span> res.<span class="f">status</span>(400).<span class="f">json</span>({ error: <span class="s">'Carrito vacío o total inválido'</span> });
+  }
+
+  <span class="k">try</span> {
+    <span class="k">const</span> reference = <span class="s">`TS-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`</span>;
+    <span class="k">const</span> amountInCents = <span class="f">Math.round</span>(total * 100);
+    <span class="k">const</span> currency = <span class="s">'COP'</span>;
+
+    <span class="k">const</span> raw = <span class="s">`${reference}${amountInCents}${currency}${process.env.WOMPI_INTEGRITY_SECRET}`</span>;
+    <span class="k">const</span> signature = <span class="n">crypto</span>.<span class="f">createHash</span>(<span class="s">'sha256'</span>).<span class="f">update</span>(raw).<span class="f">digest</span>(<span class="s">'hex'</span>);
+
+    <span class="k">await</span> <span class="n">Transaccion</span>.<span class="f">create</span>({
+      wompiReference: reference, amountInCents, currency,
+      status: <span class="s">'PENDING'</span>,
+      pendingOrderData: { usuario: req.usuario.id, productos, total }
+    });
+
+    res.<span class="f">json</span>({
+      reference, amountInCents, currency, signature,
+      publicKey: process.env.WOMPI_PUBLIC_KEY
+    });
+
+  } <span class="k">catch</span> (err) {
+    <span class="f">console.error</span>(err);
+    res.<span class="f">status</span>(500).<span class="f">json</span>({ error: <span class="s">'Error al generar la firma'</span> });
+  }
+});
+
+<span class="c">// [PASO 3 — NUEVO] Crea la Orden cuando Wompi confirma un pago APPROVED</span>
+<span class="c">// (usada por el polling y por el webhook, para no duplicar lógica)</span>
+<span class="k">async function</span> <span class="f">confirmarAprobado</span>(transaccion, wompiTx) {
+  transaccion.status = wompiTx.status;
+  transaccion.wompiTransactionId = wompiTx.id;
+
+  <span class="k">if</span> (wompiTx.status === <span class="s">'APPROVED'</span> && !transaccion.orden) {
+    <span class="k">const</span> pod = transaccion.pendingOrderData;
+    <span class="k">const</span> orden = <span class="k">await</span> <span class="n">Orden</span>.<span class="f">create</span>({
+      usuario: pod.usuario, productos: pod.productos, total: pod.total,
+      wompiTransactionId: wompiTx.id, wompiReference: wompiTx.reference,
+      estado: <span class="s">'PAGO_CONFIRMADO'</span>
+    });
+    transaccion.orden = orden._id;
+  }
+
+  <span class="k">await</span> transaccion.<span class="f">save</span>();
+}
+
+<span class="c">// [PASO 2 endpoint, PASO 3 lógica interna] GET /api/pagos/estado/:reference — polling</span>
+<span class="n">router</span>.<span class="f">get</span>(<span class="s">'/estado/:reference'</span>, <span class="n">verificarToken</span>, <span class="k">async</span> (req, res) => {
+  <span class="k">try</span> {
+    <span class="k">const</span> tx = <span class="k">await</span> <span class="n">Transaccion</span>.<span class="f">findOne</span>({ wompiReference: req.params.reference });
+    <span class="k">if</span> (!tx) <span class="k">return</span> res.<span class="f">status</span>(404).<span class="f">json</span>({ error: <span class="s">'Transacción no encontrada'</span> });
+
+    <span class="c">// [PASO 3 — NUEVO] Sin webhook (no hay ngrok), preguntamos directamente a Wompi.</span>
+    <span class="c">// ⚠️ Requiere la llave PRIVADA (WOMPI_PRIVATE_KEY), no la pública.</span>
+    <span class="k">if</span> (tx.status === <span class="s">'PENDING'</span>) {
+      <span class="k">const</span> wompiRes = <span class="k">await</span> <span class="f">fetch</span>(
+        <span class="s">`https://sandbox.wompi.co/v1/transactions?reference=${tx.wompiReference}`</span>,
+        { headers: { Authorization: <span class="s">`Bearer ${process.env.WOMPI_PRIVATE_KEY}`</span> } }
+      );
+
+      <span class="k">if</span> (!wompiRes.ok) {
+        <span class="f">console.error</span>(<span class="s">'Error consultando Wompi:'</span>, wompiRes.status, <span class="k">await</span> wompiRes.<span class="f">text</span>());
+      } <span class="k">else</span> {
+        <span class="k">const</span> wompiJson = <span class="k">await</span> wompiRes.<span class="f">json</span>();
+        <span class="k">const</span> wompiTx = wompiJson.data?.[0];
+
+        <span class="k">if</span> (wompiTx && wompiTx.status !== <span class="s">'PENDING'</span>) {
+          <span class="k">await</span> <span class="f">confirmarAprobado</span>(tx, wompiTx);
+        }
+      }
+    }
+
+    res.<span class="f">json</span>({ status: tx.status, ordenId: tx.orden ?? <span class="k">null</span> });
+  } <span class="k">catch</span> (err) {
+    <span class="f">console.error</span>(err);
+    res.<span class="f">status</span>(500).<span class="f">json</span>({ error: <span class="s">'Error interno'</span> });
+  }
+});
+
+<span class="c">// [PASO 2 endpoint, PASO 3 simplificado] POST /api/pagos/webhook</span>
+<span class="c">// Wompi llama a esta ruta en producción (cuando hay servidor público).</span>
+<span class="n">router</span>.<span class="f">post</span>(<span class="s">'/webhook'</span>, <span class="k">async</span> (req, res) => {
+  <span class="k">const</span> { signature, timestamp, data } = req.body;
+  <span class="k">const</span> secret = process.env.WOMPI_EVENTS_SECRET;
+  <span class="k">if</span> (!secret) <span class="k">return</span> res.<span class="f">status</span>(200).<span class="f">json</span>({ ok: <span class="k">true</span> }); <span class="c">// sin secreto → modo dev, ignorar</span>
+
+  <span class="k">const</span> tx = data?.transaction;
+  <span class="k">if</span> (!tx) <span class="k">return</span> res.<span class="f">status</span>(400).<span class="f">json</span>({ error: <span class="s">'Payload inválido'</span> });
+
+  <span class="k">const</span> props = (signature?.properties || []).<span class="f">map</span>((prop) => {
+    <span class="k">const</span> path = prop.<span class="f">split</span>(<span class="s">'.'</span>).<span class="f">slice</span>(1);
+    <span class="k">let</span> v = tx; <span class="k">for</span> (<span class="k">const</span> k <span class="k">of</span> path) v = v?.[k]; <span class="k">return</span> v;
+  }).<span class="f">join</span>(<span class="s">''</span>);
+
+  <span class="k">const</span> computed = <span class="n">crypto</span>.<span class="f">createHash</span>(<span class="s">'sha256'</span>)
+    .<span class="f">update</span>(<span class="s">`${props}${timestamp}${secret}`</span>).<span class="f">digest</span>(<span class="s">'hex'</span>);
+  <span class="k">if</span> (computed !== signature?.checksum) <span class="k">return</span> res.<span class="f">status</span>(400).<span class="f">json</span>({ error: <span class="s">'Firma inválida'</span> });
+
+  <span class="k">const</span> transaccion = <span class="k">await</span> <span class="n">Transaccion</span>.<span class="f">findOne</span>({ wompiReference: tx.reference });
+  <span class="k">if</span> (!transaccion) <span class="k">return</span> res.<span class="f">status</span>(404).<span class="f">json</span>({ error: <span class="s">'Transacción no encontrada'</span> });
+
+  <span class="c">// [PASO 3 — NUEVO] antes tenía la lógica de crear la Orden duplicada aquí mismo;</span>
+  <span class="c">// ahora reutiliza confirmarAprobado()</span>
+  <span class="k">await</span> <span class="f">confirmarAprobado</span>(transaccion, tx);
+  res.<span class="f">json</span>({ ok: <span class="k">true</span> });
+});
+
+module.exports = <span class="n">router</span>;</pre></div>
+    </div>
+  </section>
+
+  <!-- ════ PASO 4 ════ -->
+  <section class="section" id="paso4" data-step="paso4">
+    <div class="section-header">
+      <span class="step-badge extra">Paso 4 · Frontend</span>
+      <h2 class="section-title">Widget Wompi + polling en <code>carrito.html</code></h2>
+    </div>
+
+    <div class="callout warn"><span class="callout-icon">⚠️</span><span><strong>En este proyecto NO se crea un <code>iniciarPago()</code> nuevo ni un <code>#wompi-widget-container</code>.</strong> El checkout ya existía en <code>frontend/js/main.js</code> (el listener de <code>#btn-confirmar</code>, que antes llamaba directo a <code>POST /api/ordenes</code>). Se <strong>reemplaza ese listener completo</strong> para que pida la firma, abra el Widget y confirme por polling — la orden ya no se crea al hacer clic, se crea solo si el pago es aprobado. El <code>WidgetCheckout</code> real de Wompi abre su propio modal/popup, así que no hace falta un contenedor propio ni <code>redirectUrl</code>.</span></div>
+
+    <div class="callout teal"><span class="callout-icon">💡</span><span><strong>Flujo completo del frontend:</strong></span></div>
+    <div class="flujo-grid" style="margin-bottom:20px;">
+      <div class="flujo-item"><div class="flujo-num">1</div><div class="flujo-txt">Clic "💳 Pagar con Wompi" → fetch /api/pagos/firma</div></div>
+      <div class="flujo-arrow">→</div>
+      <div class="flujo-item"><div class="flujo-num">2</div><div class="flujo-txt">Backend devuelve referencia + firma (Transaccion PENDING)</div></div>
+      <div class="flujo-arrow">→</div>
+      <div class="flujo-item"><div class="flujo-num">3</div><div class="flujo-txt">Se abre el Widget de Wompi (su propio modal)</div></div>
+      <div class="flujo-arrow">→</div>
+      <div class="flujo-item"><div class="flujo-num">4</div><div class="flujo-txt">Al cerrar el Widget, polling cada 3 seg → detecta APPROVED</div></div>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">4.1 — Agregar el script del Widget al <code>&lt;head&gt;</code> de <code>carrito.html</code></div>
+      <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">frontend/carrito.html — &lt;head&gt;</span><span class="code-tag yellow">agregar</span></div><pre><span class="c">&lt;!-- Script oficial del Widget de Wompi — cargar desde su CDN --&gt;</span>
+&lt;<span class="k">script</span> <span class="n">src</span>=<span class="s">"https://checkout.wompi.co/widget.js"</span>&gt;&lt;/<span class="k">script</span>&gt;</pre></div>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">4.2 — Cambiar el texto del botón existente</div>
+      <p style="color:var(--txt-dim);font-size:13px;margin-bottom:12px;"><code>frontend/carrito.html</code> — el botón <code>#btn-confirmar</code> ya existe, solo se le cambia el texto (no se crea uno nuevo, no se agrega <code>onclick</code> — el listener va en <code>main.js</code>):</p>
+      <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">frontend/carrito.html — sección de pago</span><span class="code-tag yellow">editar texto</span></div><pre>&lt;button id=<span class="s">"btn-confirmar"</span> class=<span class="s">"btn btn-primario"</span>&gt;💳 Pagar con Wompi&lt;/button&gt;</pre></div>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">4.3 — Reemplazar el listener de <code>#btn-confirmar</code> en <code>main.js</code></div>
+      <p style="color:var(--txt-dim);font-size:13px;margin-bottom:12px;">Editar <code>frontend/js/main.js</code> — buscar el bloque <code>// ===== S17c: CHECKOUT — CONFIRMAR PEDIDO =====</code> y reemplazarlo entero por este (conserva <code>leerCarrito()</code>, <code>actualizarBadge()</code> y <code>mostrarPaginaCarrito()</code>, que ya existen en el archivo):</p>
+      <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">frontend/js/main.js</span><span class="code-tag yellow">reemplazar bloque completo</span></div><pre><span class="c">// ===== S18A: CHECKOUT — PAGAR CON WOMPI =====</span>
+<span class="c">// Ya no se crea la orden directamente. Se pide una firma al backend,</span>
+<span class="c">// se abre el Widget de Wompi, y la orden se crea solo si el pago es aprobado</span>
+<span class="c">// (el backend lo confirma vía polling, ver /api/pagos/estado/:reference).</span>
+
+<span class="k">const</span> <span class="n">btnConfirmar</span> = document.<span class="f">getElementById</span>(<span class="s">'btn-confirmar'</span>);
+<span class="k">let</span> pollingInterval = <span class="k">null</span>;
+
+<span class="k">if</span> (btnConfirmar) {
+  btnConfirmar.<span class="f">addEventListener</span>(<span class="s">'click'</span>, <span class="k">async function</span>() {
+    <span class="k">const</span> token   = localStorage.<span class="f">getItem</span>(<span class="s">'token'</span>);
+    <span class="k">const</span> carrito = <span class="f">leerCarrito</span>();
+    <span class="k">const</span> mensaje = document.<span class="f">getElementById</span>(<span class="s">'checkout-mensaje'</span>);
+
+    <span class="k">if</span> (!token) {
+      mensaje.innerHTML =
+        <span class="s">'&lt;div style="background:#fef9c3; border:1px solid #fde047; border-radius:10px; padding:16px;"&gt;'</span> +
+          <span class="s">'&lt;p style="color:#854d0e; font-weight:600;"&gt;⚠️ Debes iniciar sesión para confirmar tu pedido.&lt;/p&gt;'</span> +
+          <span class="s">'&lt;a href="login.html" style="color:#92400e;"&gt;Ir al login →&lt;/a&gt;'</span> +
+        <span class="s">'&lt;/div&gt;'</span>;
+      mensaje.style.display = <span class="s">'block'</span>;
+      <span class="k">return</span>;
+    }
+
+    <span class="k">if</span> (carrito.length === 0) {
+      mensaje.innerHTML =
+        <span class="s">'&lt;div style="background:#fef9c3; border:1px solid #fde047; border-radius:10px; padding:16px;"&gt;'</span> +
+          <span class="s">'&lt;p style="color:#854d0e; font-weight:600;"&gt;⚠️ El carrito está vacío.&lt;/p&gt;'</span> +
+        <span class="s">'&lt;/div&gt;'</span>;
+      mensaje.style.display = <span class="s">'block'</span>;
+      <span class="k">return</span>;
+    }
+
+    <span class="k">const</span> productosParaEnviar = carrito.<span class="f">map</span>(<span class="k">function</span>(item) {
+      <span class="k">return</span> { producto: item.id, cantidad: 1 };
+    });
+
+    <span class="c">// Calcular el total — el precio viene como string "$1.299.000".</span>
+    <span class="c">// Los puntos son separadores de miles (formato colombiano), no decimales — hay que quitarlos.</span>
+    <span class="k">const</span> total = carrito.<span class="f">reduce</span>(<span class="k">function</span>(acumulado, item) {
+      <span class="k">const</span> numero = <span class="f">parseFloat</span>(item.precio.<span class="f">replace</span>(<span class="s">/[^0-9]/g</span>, <span class="s">''</span>)) || 0;
+      <span class="k">return</span> acumulado + numero;
+    }, 0);
+
+    <span class="k">try</span> {
+      btnConfirmar.disabled    = <span class="k">true</span>;
+      btnConfirmar.textContent = <span class="s">'Preparando pago...'</span>;
+
+      <span class="c">// Pedir al backend la firma de integridad (crea la Transaccion en estado PENDING)</span>
+      <span class="k">const</span> respuesta = <span class="k">await</span> <span class="f">fetch</span>(<span class="s">'http://localhost:3000/api/pagos/firma'</span>, {
+        method:  <span class="s">'POST'</span>,
+        headers: {
+          <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span>,
+          <span class="s">'Authorization'</span>: <span class="s">'Bearer '</span> + token
+        },
+        body: <span class="f">JSON.stringify</span>({ productos: productosParaEnviar, total: total })
+      });
+
+      <span class="k">const</span> datos = <span class="k">await</span> respuesta.<span class="f">json</span>();
+
+      <span class="k">if</span> (!respuesta.ok) {
+        mensaje.innerHTML =
+          <span class="s">'&lt;div style="background:#fee2e2; border:1px solid #fca5a5; border-radius:10px; padding:16px;"&gt;'</span> +
+            <span class="s">'&lt;p style="color:#991b1b; font-weight:600;"&gt;❌ '</span> + (datos.error || <span class="s">'Error al preparar el pago'</span>) + <span class="s">'&lt;/p&gt;'</span> +
+          <span class="s">'&lt;/div&gt;'</span>;
+        mensaje.style.display = <span class="s">'block'</span>;
+        btnConfirmar.disabled    = <span class="k">false</span>;
+        btnConfirmar.textContent = <span class="s">'💳 Pagar con Wompi'</span>;
+        <span class="k">return</span>;
+      }
+
+      <span class="c">// Abrir el Widget de Wompi con los datos de la firma</span>
+      <span class="k">const</span> checkout = <span class="k">new</span> <span class="f">WidgetCheckout</span>({
+        currency:      datos.currency,
+        amountInCents: datos.amountInCents,
+        reference:     datos.reference,
+        publicKey:     datos.publicKey,
+        signature:     { integrity: datos.signature }
+      });
+
+      checkout.<span class="f">open</span>(<span class="k">function</span>() {
+        <span class="c">// Este callback se ejecuta cuando el widget se cierra (pago terminado o cancelado)</span>
+        <span class="f">iniciarPolling</span>(datos.reference, token, mensaje);
+      });
+
+    } <span class="k">catch</span> (error) {
+      mensaje.innerHTML =
+        <span class="s">'&lt;div style="background:#fee2e2; border:1px solid #fca5a5; border-radius:10px; padding:16px;"&gt;'</span> +
+          <span class="s">'&lt;p style="color:#991b1b; font-weight:600;"&gt;❌ No se pudo conectar. Verifica que el servidor esté corriendo.&lt;/p&gt;'</span> +
+        <span class="s">'&lt;/div&gt;'</span>;
+      mensaje.style.display = <span class="s">'block'</span>;
+      btnConfirmar.disabled    = <span class="k">false</span>;
+      btnConfirmar.textContent = <span class="s">'💳 Pagar con Wompi'</span>;
+    }
+  });
+}
+
+<span class="c">// Consulta cada 3 segundos si el pago ya fue aprobado por Wompi.</span>
+<span class="c">// Máximo 20 intentos (60 segundos) antes de mostrar timeout.</span>
+<span class="k">function</span> <span class="f">iniciarPolling</span>(reference, token, mensaje) {
+  btnConfirmar.textContent = <span class="s">'Confirmando pago...'</span>;
+  <span class="k">let</span> intentos = 0;
+
+  pollingInterval = <span class="f">setInterval</span>(<span class="k">async function</span>() {
+    intentos++;
+    <span class="k">if</span> (intentos > 20) {
+      <span class="f">clearInterval</span>(pollingInterval);
+      <span class="f">mostrarResultadoPago</span>(<span class="s">'TIMEOUT'</span>, mensaje);
+      <span class="k">return</span>;
+    }
+
+    <span class="k">try</span> {
+      <span class="k">const</span> r = <span class="k">await</span> <span class="f">fetch</span>(<span class="s">'http://localhost:3000/api/pagos/estado/'</span> + reference, {
+        headers: { <span class="s">'Authorization'</span>: <span class="s">'Bearer '</span> + token }
+      });
+      <span class="k">const</span> data = <span class="k">await</span> r.<span class="f">json</span>();
+
+      <span class="k">if</span> (data.status !== <span class="s">'PENDING'</span>) {
+        <span class="f">clearInterval</span>(pollingInterval);
+        <span class="f">mostrarResultadoPago</span>(data.status, mensaje);
+      }
+    } <span class="k">catch</span> (e) {
+      <span class="f">console.error</span>(<span class="s">'Polling error'</span>, e);
+    }
+  }, 3000);
+}
+
+<span class="k">function</span> <span class="f">mostrarResultadoPago</span>(status, mensaje) {
+  <span class="k">if</span> (status === <span class="s">'APPROVED'</span>) {
+    localStorage.<span class="f">removeItem</span>(<span class="s">'carrito'</span>);
+    <span class="f">actualizarBadge</span>();
+
+    mensaje.innerHTML =
+      <span class="s">'&lt;div style="background:#dcfce7; border:1px solid #bbf7d0; border-radius:10px; padding:20px;"&gt;'</span> +
+        <span class="s">'&lt;p style="color:#15803d; font-weight:700; font-size:16px;"&gt;✅ ¡Pago aprobado!&lt;/p&gt;'</span> +
+        <span class="s">'&lt;p style="color:#166534; font-size:13px; margin-top:6px;"&gt;Tu orden fue registrada en el sistema.&lt;/p&gt;'</span> +
+        <span class="s">'&lt;a href="index.html" style="color:#15803d; font-weight:600;"&gt;← Volver al inicio&lt;/a&gt;'</span> +
+      <span class="s">'&lt;/div&gt;'</span>;
+    mensaje.style.display = <span class="s">'block'</span>;
+
+    <span class="f">mostrarPaginaCarrito</span>(); <span class="c">// actualizar la vista del carrito (ahora vacío)</span>
+
+  } <span class="k">else if</span> (status === <span class="s">'DECLINED'</span>) {
+    mensaje.innerHTML =
+      <span class="s">'&lt;div style="background:#fee2e2; border:1px solid #fca5a5; border-radius:10px; padding:16px;"&gt;'</span> +
+        <span class="s">'&lt;p style="color:#991b1b; font-weight:600;"&gt;❌ Pago rechazado. Intenta con otra tarjeta.&lt;/p&gt;'</span> +
+      <span class="s">'&lt;/div&gt;'</span>;
+    mensaje.style.display = <span class="s">'block'</span>;
+    btnConfirmar.disabled    = <span class="k">false</span>;
+    btnConfirmar.textContent = <span class="s">'💳 Pagar con Wompi'</span>;
+
+  } <span class="k">else</span> {
+    mensaje.innerHTML =
+      <span class="s">'&lt;div style="background:#fef9c3; border:1px solid #fde047; border-radius:10px; padding:16px;"&gt;'</span> +
+        <span class="s">'&lt;p style="color:#854d0e; font-weight:600;"&gt;⏱️ No pudimos confirmar el pago todavía. Revisa "Mis pedidos" en un momento.&lt;/p&gt;'</span> +
+      <span class="s">'&lt;/div&gt;'</span>;
+    mensaje.style.display = <span class="s">'block'</span>;
+    btnConfirmar.disabled    = <span class="k">false</span>;
+    btnConfirmar.textContent = <span class="s">'💳 Pagar con Wompi'</span>;
+  }
+}</pre></div>
+
+      <div class="callout ok"><span class="callout-icon">✅</span><span><strong>Verificar:</strong> el mensaje <code>#checkout-mensaje</code> ya existía en el HTML, se reutiliza — no se crea un <code>#pago-resultado</code> nuevo.</span></div>
+    </div>
+  </section>
+
+  <!-- ════ CHECKLIST ════ -->
+  <section class="section" id="checklist" data-step="checklist">
+    <div class="section-header">
+      <span class="step-badge green">Checklist</span>
+      <h2 class="section-title">Probar el flujo completo y verificar todo</h2>
+    </div>
+
+    <div class="subsec-title" style="font-size:14px;font-weight:600;color:var(--txt-dim);margin-bottom:12px;">🧪 Tarjetas de prueba Wompi Sandbox</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
+      <div style="background:var(--green-bg);border:1px solid rgba(34,197,94,.25);border-radius:10px;padding:16px;">
+        <div style="font-size:11px;font-weight:800;letter-spacing:1px;color:var(--green);margin-bottom:8px;">✅ PAGO APROBADO</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--txt);margin-bottom:6px;">4242 4242 4242 4242</div>
+        <div style="font-size:12px;color:var(--txt-dim);">CVV: cualquier 3 dígitos · Fecha futura · Cualquier nombre</div>
+        <div style="margin-top:10px;font-size:12px;font-weight:700;color:var(--green);">Polling detecta APPROVED → "¡Pago aprobado!"</div>
+      </div>
+      <div style="background:var(--red-bg);border:1px solid rgba(248,113,113,.2);border-radius:10px;padding:16px;">
+        <div style="font-size:11px;font-weight:800;letter-spacing:1px;color:var(--red);margin-bottom:8px;">❌ PAGO RECHAZADO</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--txt);margin-bottom:6px;">4111 1111 1111 1111</div>
+        <div style="font-size:12px;color:var(--txt-dim);">CVV: cualquier 3 dígitos · Fecha futura · Cualquier nombre</div>
+        <div style="margin-top:10px;font-size:12px;font-weight:700;color:var(--red);">Polling detecta DECLINED → "Pago rechazado"</div>
+      </div>
+    </div>
+
+    <div class="subsec-title" style="font-size:14px;font-weight:600;color:var(--txt-dim);margin-bottom:12px;">🧪 Prueba el flujo paso a paso</div>
+    <div class="table-wrap" style="margin-bottom:24px;">
+      <table>
+        <thead><tr><th>Paso</th><th>Acción</th><th>Resultado esperado</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Backend corre con <code>npm run dev</code></td><td>Terminal muestra "Servidor en puerto 3000" — sin ngrok</td></tr>
+          <tr><td>2</td><td>Inicia sesión en login.html</td><td>Token guardado en localStorage</td></tr>
+          <tr><td>3</td><td>Agrega productos y clic "💳 Pagar con Wompi"</td><td>Se abre el modal del Widget de Wompi</td></tr>
+          <tr><td>4</td><td>Ingresar tarjeta aprobada (4242…)</td><td>Widget muestra "Pago exitoso" y se cierra</td></tr>
+          <tr><td>5</td><td>Polling detecta el resultado</td><td>Mensaje verde "¡Pago aprobado!" aparece en la página</td></tr>
+          <tr><td>6</td><td>MongoDB Compass → colección <code>ordens</code></td><td>Documento nuevo con <code>estado: "PAGO_CONFIRMADO"</code></td></tr>
+          <tr><td>7</td><td>MongoDB Compass → colección <code>transaccions</code></td><td>Documento con <code>status: "APPROVED"</code> y <code>orden</code> asignado</td></tr>
+          <tr><td>8</td><td>Repetir con tarjeta rechazada (4111…)</td><td>Mensaje rojo · NO se crea orden · transaccion.status: "DECLINED"</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsec-title" style="font-size:14px;font-weight:600;color:var(--txt-dim);margin-bottom:12px;">✅ Checklist completo</div>
+    <ul class="checklist">
+      <li><div class="check-box"></div><span>Cuenta Wompi creada · <code>WOMPI_PUBLIC_KEY</code> y <code>WOMPI_INTEGRITY_SECRET</code> en .env</span></li>
+      <li><div class="check-box"></div><span>Modelos <code>Orden.js</code> y <code>Transaccion.js</code> creados</span></li>
+      <li><div class="check-box"></div><span><code>routes/pago.js</code> creado con <code>POST /firma</code> y <code>GET /estado/:reference</code></span></li>
+      <li><div class="check-box"></div><span><code>server.js</code> registra <code>app.use('/api/pagos', pagoRoutes)</code></span></li>
+      <li><div class="check-box"></div><span>Script del Widget <code>checkout.wompi.co/widget.js</code> en el <code>&lt;head&gt;</code> de <code>carrito.html</code></span></li>
+      <li><div class="check-box"></div><span>Listener de <code>#btn-confirmar</code> en <code>main.js</code> reemplazado (firma → Widget → polling)</span></li>
+      <li><div class="check-box"></div><span>Botón muestra "💳 Pagar con Wompi" y abre el modal del Widget al hacer clic</span></li>
+      <li><div class="check-box"></div><span>Tarjeta 4242… → mensaje verde en <code>#checkout-mensaje</code> · colección <code>ordens</code> tiene el pedido ✅</span></li>
+      <li><div class="check-box"></div><span>Tarjeta 4111… → mensaje rojo · NO hay orden en MongoDB ✅</span></li>
+    </ul>
+
+    <div class="subsec-title" style="font-size:14px;font-weight:600;color:var(--txt-dim);margin:24px 0 12px;">❌ Errores frecuentes</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Error que ves</th><th>Causa</th><th>Qué hacer</th></tr></thead>
+        <tbody>
+          <tr><td>Widget no aparece / pantalla en blanco</td><td>Firma de integridad incorrecta</td><td>Verificar que el secreto en .env sea el "Secreto de integridad" (no la llave privada)</td></tr>
+          <tr><td>WidgetCheckout is not defined</td><td>Script del widget no cargado</td><td>Verificar que el <code>&lt;script src="checkout.wompi.co..."&gt;</code> esté en el <code>&lt;head&gt;</code></td></tr>
+          <tr><td>CORS error en fetch al backend</td><td>Frontend en puerto diferente al configurado en CORS</td><td>Agregar el puerto del frontend a <code>cors({ origin: [...] })</code> en server.js</td></tr>
+          <tr><td>401 en /api/pagos/firma</td><td>Token expirado o no enviado</td><td>Hacer login de nuevo · verificar el header Authorization en Thunder Client</td></tr>
+          <tr><td>El Widget muestra un monto absurdo (ej. producto de $8.999.000 se cobra como $9)</td><td>Ver explicación detallada abajo ⬇️</td><td>Ver fix abajo ⬇️</td></tr>
+          <tr><td>El pago sale exitoso en el Widget pero la Transaccion se queda en PENDING para siempre en MongoDB</td><td>Ver explicación detallada abajo ⬇️</td><td>Ver fix abajo ⬇️</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">🐛 Bug: el total se calcula mal con precios de más de 1 millón</div>
+
+      <p style="color:var(--txt-dim);font-size:13px;margin-bottom:8px;"><strong>Dónde está:</strong> <code>frontend/js/main.js</code>, dentro del listener de <code>#btn-confirmar</code> (bloque <code>// ===== S18A: CHECKOUT — PAGAR CON WOMPI =====</code>), la línea que calcula <code>total</code>.</p>
+
+      <p style="color:var(--txt-dim);font-size:13px;margin-bottom:8px;"><strong>Por qué pasa:</strong> el precio del producto viene como texto en formato colombiano, ej. <code>"$8.999.000"</code>. Los puntos ahí son <strong>separadores de miles</strong>, no decimales. El código original solo quitaba el símbolo <code>$</code> y dejaba los puntos:</p>
+
+      <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">frontend/js/main.js — código con el bug</span><span class="code-tag yellow">antes</span></div><pre><span class="k">const</span> numero = <span class="f">parseFloat</span>(item.precio.<span class="f">replace</span>(<span class="s">/[^0-9.]/g</span>, <span class="s">''</span>)) || 0;</pre></div>
+
+      <p style="color:var(--txt-dim);font-size:13px;margin:12px 0;"><code>item.precio.replace(/[^0-9.]/g, '')</code> convierte <code>"$8.999.000"</code> en el string <code>"8.999.000"</code> (le quita el <code>$</code> pero conserva los 3 puntos). Luego <code>parseFloat("8.999.000")</code> lee solo hasta el <strong>primer</strong> punto como si fuera un decimal, e ignora el resto — el resultado es <code>8.999</code>, no 8 millones. Con productos de menos de $1.000.000 (un solo punto o ninguno) el bug no se nota, por eso pasa desapercibido hasta probar con algo caro como el MacBook Pro M3.</p>
+
+      <p style="color:var(--txt-dim);font-size:13px;margin-bottom:8px;"><strong>Cómo arreglarlo:</strong> en <code>frontend/js/main.js</code>, buscar esa línea exacta y quitar el punto (<code>.</code>) de la lista de caracteres permitidos en el regex, para que también elimine los separadores de miles:</p>
+
+      <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">frontend/js/main.js</span><span class="code-tag green">corregido</span></div><pre><span class="c">// Antes (con bug):</span>
+<span class="k">const</span> numero = <span class="f">parseFloat</span>(item.precio.<span class="f">replace</span>(<span class="s">/[^0-9.]/g</span>, <span class="s">''</span>)) || 0;
+
+<span class="c">// Después (corregido):</span>
+<span class="k">const</span> numero = <span class="f">parseFloat</span>(item.precio.<span class="f">replace</span>(<span class="s">/[^0-9]/g</span>, <span class="s">''</span>)) || 0;</pre></div>
+
+      <p style="color:var(--txt-dim);font-size:13px;margin-top:12px;">Con <code>/[^0-9]/g</code> (sin el <code>.</code> dentro de los corchetes) se eliminan <strong>todos</strong> los caracteres que no sean dígitos — el <code>$</code> y los 3 puntos — dejando <code>"8999000"</code>, que <code>parseFloat</code> lee correctamente como 8.999.000.</p>
+
+      <div class="callout ok"><span class="callout-icon">✅</span><span><strong>Cómo verificar que quedó bien:</strong> agregar al carrito un producto de más de $1.000.000 (ej. MacBook Pro M3 a $8.999.000), hacer clic en "💳 Pagar con Wompi", y confirmar que el Widget muestra el monto completo, no un número de una sola cifra.</span></div>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">🐛 Bug: la Transaccion se queda en PENDING aunque el pago sí fue aprobado</div>
+
+      <p style="color:var(--txt-dim);font-size:13px;margin-bottom:8px;"><strong>Dónde está:</strong> <code>backend/routes/pago.js</code>, dentro de <code>GET /estado/:reference</code> (el endpoint de polling), en el <code>fetch</code> que consulta la API de Wompi.</p>
+
+      <p style="color:var(--txt-dim);font-size:13px;margin-bottom:8px;"><strong>Por qué pasa:</strong> ese <code>fetch</code> usaba <code>WOMPI_PUBLIC_KEY</code> en el header <code>Authorization</code>:</p>
+
+      <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">backend/routes/pago.js — código con el bug</span><span class="code-tag yellow">antes</span></div><pre><span class="k">const</span> wompiRes = <span class="k">await</span> <span class="f">fetch</span>(
+  <span class="s">`https://sandbox.wompi.co/v1/transactions?reference=${tx.wompiReference}`</span>,
+  { headers: { Authorization: <span class="s">`Bearer ${process.env.WOMPI_PUBLIC_KEY}`</span> } }
+);</pre></div>
+
+      <p style="color:var(--txt-dim);font-size:13px;margin:12px 0;">El endpoint <code>GET /v1/transactions</code> de Wompi (consultar transacciones por referencia) requiere la <strong>llave privada</strong> (<code>WOMPI_PRIVATE_KEY</code>, prefijo <code>prv_test_...</code>), no la pública. La llave pública solo sirve para abrir el Widget en el frontend. Como <code>fetch</code> <strong>no lanza excepción</strong> cuando la respuesta HTTP es un error (401/403) — solo la lanza si falla la red — el <code>catch</code> del endpoint nunca se activaba, el error quedaba en silencio, y la Transaccion se quedaba en <code>PENDING</code> para siempre aunque Wompi sí hubiera aprobado el pago.</p>
+
+      <p style="color:var(--txt-dim);font-size:13px;margin-bottom:8px;"><strong>Cómo arreglarlo:</strong></p>
+      <ol style="color:var(--txt-dim);font-size:13px;padding-left:20px;margin-bottom:12px;">
+        <li>En el panel de Wompi (Sandbox → Desarrolladores → Llaves de API), copiar la <strong>"Llave privada"</strong> (prefijo <code>prv_test_...</code>).</li>
+        <li>Agregarla a <code>backend/.env</code>: <code>WOMPI_PRIVATE_KEY=prv_test_tu_llave_privada_aqui</code></li>
+        <li>En <code>backend/routes/pago.js</code>, cambiar la llave usada en el <code>fetch</code> y agregar verificación de errores HTTP:</li>
+      </ol>
+
+      <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">backend/routes/pago.js</span><span class="code-tag green">corregido</span></div><pre><span class="c">// Antes (con bug):</span>
+<span class="k">const</span> wompiRes = <span class="k">await</span> <span class="f">fetch</span>(
+  <span class="s">`https://sandbox.wompi.co/v1/transactions?reference=${tx.wompiReference}`</span>,
+  { headers: { Authorization: <span class="s">`Bearer ${process.env.WOMPI_PUBLIC_KEY}`</span> } }
+);
+<span class="k">const</span> wompiJson = <span class="k">await</span> wompiRes.<span class="f">json</span>();
+<span class="k">const</span> wompiTx = wompiJson.data?.[0];
+
+<span class="k">if</span> (wompiTx && wompiTx.status !== <span class="s">'PENDING'</span>) {
+  <span class="k">await</span> <span class="f">confirmarAprobado</span>(tx, wompiTx);
+}
+
+<span class="c">// Después (corregido):</span>
+<span class="k">const</span> wompiRes = <span class="k">await</span> <span class="f">fetch</span>(
+  <span class="s">`https://sandbox.wompi.co/v1/transactions?reference=${tx.wompiReference}`</span>,
+  { headers: { Authorization: <span class="s">`Bearer ${process.env.WOMPI_PRIVATE_KEY}`</span> } }
+);
+
+<span class="k">if</span> (!wompiRes.ok) {
+  <span class="f">console.error</span>(<span class="s">'Error consultando Wompi:'</span>, wompiRes.status, <span class="k">await</span> wompiRes.<span class="f">text</span>());
+} <span class="k">else</span> {
+  <span class="k">const</span> wompiJson = <span class="k">await</span> wompiRes.<span class="f">json</span>();
+  <span class="k">const</span> wompiTx = wompiJson.data?.[0];
+
+  <span class="k">if</span> (wompiTx && wompiTx.status !== <span class="s">'PENDING'</span>) {
+    <span class="k">await</span> <span class="f">confirmarAprobado</span>(tx, wompiTx);
+  }
+}</pre></div>
+
+      <div class="callout ok"><span class="callout-icon">✅</span><span><strong>Cómo verificar que quedó bien:</strong> hacer un pago de prueba con la tarjeta 4242 4242 4242 4242. En la consola del backend, si algo sigue mal, ahora se verá el error real de Wompi en vez de fallar en silencio. En MongoDB Compass, la colección <code>transaccions</code> debe mostrar <code>status: "APPROVED"</code> y el campo <code>orden</code> con un ObjectId asignado — no <code>PENDING</code>.</span></div>
+
+      <div class="callout warn"><span class="callout-icon">🗑️</span><span><strong>Limpiar datos de prueba:</strong> las Transacciones que quedaron en <code>PENDING</code> por este bug (antes del fix) son basura de pruebas fallidas. Abrir MongoDB Compass, ir a la colección <code>transaccions</code>, buscar el documento por su <code>wompiReference</code>, y eliminarlo con "Delete document" — no hace falta un script, es un borrado manual puntual.</span></div>
+    </div>
+
+    <div class="callout teal" style="margin-top:24px;">
+      <span class="callout-icon">🚀</span>
+      <span><strong>Próxima sesión — S18B:</strong> Dashboard de cliente (ver pedidos + estado de pago) y dashboard de administrador (gestionar todos los pedidos). No se necesita ngrok para eso tampoco.</span>
+    </div>
+  </section>
+
+</main>
+
+<script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+
+const STEPS = ['paso0','paso1','paso2','paso3','paso4','checklist'];
+const KEY   = 's18a-progress';
+
+function getState() { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch { return {}; } }
+function saveState(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch {} }
+
+function updateProgress() {
+  const state = getState();
+  const done  = STEPS.filter(s => state[s]).length;
+  const pct   = Math.round((done / STEPS.length) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-txt').textContent  = done + ' / ' + STEPS.length;
+}
+
+function renderButtons() {
+  const state = getState();
+  STEPS.forEach(id => {
+    const section = document.querySelector(`[data-step="${id}"]`);
+    if (!section || section.querySelector('.complete-btn')) return;
+    const btn = document.createElement('button');
+    btn.className = 'complete-btn' + (state[id] ? ' done' : '');
+    btn.dataset.step = id;
+    btn.innerHTML = `<span class="btn-icon">${state[id] ? '✅' : '🎯'}</span>
+      <span class="btn-txt">${state[id] ? '¡Paso completado!' : 'Marcar como completado'}</span>
+      <span class="btn-badge">LISTO</span>`;
+    if (!state[id]) btn.addEventListener('click', () => completeStep(id, btn));
+    section.appendChild(btn);
+    const nav = document.querySelector(`.nav-item[href="#${id}"]`);
+    if (nav && state[id]) nav.classList.add('done');
+  });
+}
+
+function completeStep(id, btn) {
+  const state = getState(); state[id] = true; saveState(state);
+  btn.classList.add('done');
+  btn.querySelector('.btn-icon').textContent = '✅';
+  btn.querySelector('.btn-txt').textContent  = '¡Paso completado!';
+  const nav = document.querySelector(`.nav-item[href="#${id}"]`);
+  if (nav) nav.classList.add('done');
+  updateProgress();
+  launchConfetti(STEPS.filter(s => state[s]).length === STEPS.length);
+}
+
+function launchConfetti(big) {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  const colors = ['#3b82f6','#2dd4bf','#22c55e','#f59e0b','#a78bfa','#f87171'];
+  const count  = big ? 180 : 60;
+  const parts  = Array.from({length: count}, () => ({
+    x: canvas.width * (big ? Math.random() : .5 + (Math.random()-.5)*.4),
+    y: big ? -10 : canvas.height * .4,
+    r: Math.random() * 7 + 3, color: colors[Math.floor(Math.random() * colors.length)],
+    tilt: 0, tiltAngle: 0, tiltSpeed: Math.random()*.1+.05,
+    vx: Math.random()*4-2, vy: Math.random()*3+2
+  }));
+  let frame = 0; const total = big ? 160 : 80;
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    parts.forEach(p => {
+      ctx.beginPath(); ctx.fillStyle = p.color;
+      ctx.ellipse(p.x, p.y, p.r, p.r*.4, p.tilt, 0, Math.PI*2); ctx.fill();
+      p.x += p.vx; p.y += p.vy; p.tiltAngle += p.tiltSpeed; p.tilt = Math.sin(p.tiltAngle)*12; p.vy += .08;
+    });
+    if (++frame < total) requestAnimationFrame(draw);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+  draw();
+}
+
+const sections = document.querySelectorAll('.section');
+const navItems = document.querySelectorAll('.nav-item');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navItems.forEach(n => n.classList.remove('active'));
+      const a = document.querySelector(`.nav-item[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { threshold: 0.25 });
+sections.forEach(s => obs.observe(s));
+
+renderButtons();
+updateProgress();
+</script>
+</body>
+</html>
